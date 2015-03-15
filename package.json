@@ -6,7 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register"
   },
-  "author": "",
+  "author": "Rasmus Kildevæld",
   "license": "ISC",
   "devDependencies": {
     "co-mocha": "^1.1.0",
