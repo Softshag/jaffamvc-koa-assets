@@ -9,7 +9,7 @@ errors = require '../lib/errors'
 helper = require './helpers'
 utils = require '../lib/utils'
 
-describe.skip 's3 store', ->
+describe 's3 store', ->
 
   before ->
 
@@ -31,7 +31,8 @@ describe.skip 's3 store', ->
     this.timeout(10000);
     @fs.create stream, @asset
     .then (url) ->
-      url.should.equal 'https://hifly-images.s3.amazonaws.com/image.png'
+      url.should.equal "https://#{process.env.S3_BUCKET}.s3.amazonaws.com/image.png"
+    
 
   it.skip 'should remove file', (done) ->
 
