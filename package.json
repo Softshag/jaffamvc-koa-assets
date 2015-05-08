@@ -28,6 +28,6 @@
     "object-assign": "^2.0.0"
   },
   "peerDependencies": {
-    "jaffamvc-koa": "~0.3.1"
+    "jaffamvc-koa": "~0.3.7"
   }
 }
