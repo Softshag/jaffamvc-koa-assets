@@ -1,6 +1,6 @@
 {
   "name": "jaffamvc-koa-assets",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "JaffaMVC assets module",
   "main": "./lib/index.js",
   "scripts": {
