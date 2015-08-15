@@ -1,11 +1,33 @@
 doctype html
 html
   head
-    script(src="./assets.js")
-    
+    link(href="/assets.css", rel="stylesheet")
+    script(src="/assets.js")
+    style.
+      .gallery {
+        font-family: 'HelveticaNeue';
+        width: 800px;
+        height: 400px;
+      }
+      .gallery-list {
+        width: 55%;
+        height: 100%;
+        float: left;
+      }
+      .gallery-preview {
+        width: 45%;
+        height: 100%;
+        float:left;
+      }
+      .assets-list-item {
+        font-size: 11px;
+        font-weight: 500;
+      }
 
   body
     h3 Assets-Browser
     #container
-    
+      .gallery
+        .gallery-list
+        .gallery-preview
     script(src="./main.js")

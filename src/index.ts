@@ -1,3 +1,8 @@
+import {EventEmitter} from 'views'
+require('./preview-handlers')
+EventEmitter.debugCallback = function (name, _, event, args) {
+  //console.log(arguments)
+}
 
 export * from './fileuploader'
 export * from './filebutton'

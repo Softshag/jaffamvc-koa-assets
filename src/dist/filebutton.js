@@ -6,8 +6,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 /// <reference path="../node_modules/views/views.d.ts" />
 var fileuploader_1 = require('./fileuploader');
-var view_1 = require('views/lib/view');
-var utils_1 = require('views/lib/utils');
+var views_1 = require('views');
 var defaults = { maxSize: 2048, mimeType: '*', autoUpload: false };
 var MessageView = (function (_super) {
     __extends(MessageView, _super);
@@ -20,7 +19,7 @@ var MessageView = (function (_super) {
         this.el.innerText = msg;
     };
     return MessageView;
-})(view_1.View);
+})(views_1.View);
 var ProgressView = (function (_super) {
     __extends(ProgressView, _super);
     function ProgressView() {
@@ -33,7 +32,7 @@ var ProgressView = (function (_super) {
         this.el.innerText = percent + "/100";
     };
     return ProgressView;
-})(view_1.View);
+})(views_1.View);
 function createButton(options) {
     var progressView = new ProgressView();
     var errorView = new MessageView();
@@ -53,8 +52,8 @@ var UploadButton = (function (_super) {
         options.tagName = 'input';
         options.attributes = { type: 'file' };
         options.className = 'file-input-button';
-        this.options = utils_1.utils.extend({}, defaults, options);
-        utils_1.utils.extend(this, utils_1.utils.pick(this.options, ['errorView', 'progressView']));
+        this.options = views_1.utils.extend({}, defaults, options);
+        views_1.utils.extend(this, views_1.utils.pick(this.options, ['errorView', 'progressView']));
         this.uploader = this.options.uploader || new fileuploader_1.default(options);
         this.events = {
             'change': '_onChange'
@@ -121,5 +120,5 @@ var UploadButton = (function (_super) {
         }
     };
     return UploadButton;
-})(view_1.View);
+})(views_1.View);
 exports.UploadButton = UploadButton;

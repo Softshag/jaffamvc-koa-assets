@@ -10,7 +10,8 @@
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "./src/dist"
     },
     "filesGlob": [
         "./src/**/*.ts",
@@ -18,9 +19,31 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "./src/assets-collection.ts",
+        "./src/assets-list.ts",
+        "./src/assets-preview.ts",
+        "./src/dist/assets-collection.d.ts",
+        "./src/dist/assets-list.d.ts",
+        "./src/dist/assets-preview.d.ts",
+        "./src/dist/filebutton.d.ts",
+        "./src/dist/fileuploader.d.ts",
+        "./src/dist/gallery.d.ts",
+        "./src/dist/index.d.ts",
+        "./src/dist/preview-handlers.d.ts",
+        "./src/dist/request.d.ts",
+        "./src/dist/templates.d.ts",
+        "./src/dist/thumbnailer.d.ts",
+        "./src/dist/thumnailer.d.ts",
+        "./src/dist/utilities.d.ts",
         "./src/filebutton.ts",
         "./src/fileuploader.ts",
+        "./src/gallery.ts",
         "./src/index.ts",
-        "./src/typings/tsd.d.ts"
+        "./src/preview-handlers.ts",
+        "./src/request.ts",
+        "./src/templates.ts",
+        "./src/thumbnailer.ts",
+        "./src/typings/tsd.d.ts",
+        "./src/utilities.ts"
     ]
 }

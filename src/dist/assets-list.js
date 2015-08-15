@@ -1,33 +1,74 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 /// <reference path="../node_modules/views/views.d.ts" />
-var collection_view_1 = require('views/lib/collection-view');
-var data_view_1 = require('views/lib/data-view');
+var views_1 = require('views');
 var utilities_1 = require('./utilities');
-exports.AssetsListItem = data_view_1.DataView.extend({
+var templates_1 = require('./templates');
+var thumbnailer_1 = require('./thumbnailer');
+var MimeList = {
+    'audio/mpeg': 'audio-generic',
+    'audio/ogg': 'audio-generic',
+    'application/pdf': 'application-pdf',
+    'video/ogg': 'video-generic',
+    'video/mp4': 'video-generic',
+    'video/x-m4v': 'video-generic',
+    'video/quicktime': 'video-generic'
+};
+exports.AssetsListItem = views_1.DataView.extend({
+    template: templates_1.AssetListItemTemplate,
+    className: 'assets-list-item',
     tagName: 'div',
-    triggers: {
-        'click': 'click'
+    ui: {
+        remove: '.remove',
+        name: '.name',
+        mime: '.mime-type'
     },
-    template: function (data) {
-        return utilities_1.truncate(data.name, 25);
+    triggers: {
+        'click': 'click',
+        'click @ui.remove': 'remove'
+    },
+    onRender: function () {
+        var _this = this;
+        var model = this.model;
+        var mime = model.get('mime'); //.replace(/\//, '-')
+        mime = MimeList[mime];
+        if (mime) {
+            views_1.html.addClass(this.ui.mime, 'mime-' + mime);
+            views_1.html.removeClass(this.ui.mime, 'mime-unknown');
+        }
+        this.ui.name.innerText = utilities_1.truncate(model.get('name'), 15);
+        thumbnailer_1.Thumbnailer.request(model)
+            .then(function (test) {
+            var image = new Image();
+            image.src = 'data:image/png;base64,' + test;
+            image.style.maxHeight = '96px';
+            image.style.maxWidth = '96px';
+            _this.ui.mime.parentNode.replaceChild(image, _this.ui.mime);
+        }).catch(function (e) {
+            console.log(e);
+        });
     }
 });
-var AssetsListView = (function (_super) {
-    __extends(AssetsListView, _super);
-    function AssetsListView(options) {
-        _super.call(this, options);
-        this.childView = exports.AssetsListItem;
+exports.AssetsListView = views_1.CollectionView.extend({
+    className: 'assets-list collection-mode',
+    childView: exports.AssetsListItem,
+    constructor: function (options) {
+        views_1.CollectionView.call(this, options);
         this.sort = true;
         this.listenTo(this, 'childview:click', function (_a) {
             var model = _a.model, view = _a.view;
             this.trigger('selected', view, model);
         });
+        this.listenTo(this, 'childview:remove', function (_a) {
+            var model = _a.model, view = _a.view;
+            if (options.deleteable === true) {
+                var remove = true;
+                if (model.has('deleteable')) {
+                    remove = !!model.get('deleteable');
+                }
+                if (remove)
+                    this.collection.remove(model);
+            }
+            else {
+            }
+        });
     }
-    return AssetsListView;
-})(collection_view_1.CollectionView);
-exports.AssetsListView = AssetsListView;
+});

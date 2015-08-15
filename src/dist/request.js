@@ -1,5 +1,9 @@
 var utilities_1 = require('./utilities');
 var xmlRe = /^(?:application|text)\/xml/, jsonRe = /^application\/json/, fileProto = /^file:/;
+function queryParam(obj) {
+    return '?' + Object.keys(obj).reduce(function (a, k) { a.push(k + '=' + encodeURIComponent(obj[k])); return a; }, []).join('&');
+}
+exports.queryParam = queryParam;
 function deferred() {
     var resolve, reject, promise = new Promise(function (res, rej) {
         resolve = res, reject = rej;
@@ -44,8 +48,14 @@ var Request = (function () {
             }
             defer.resolve(_this._xhr.responseText);
         });
-        this._xhr.open(this._method, this._url, true);
-        this._xhr.send(this._data);
+        data = this._data;
+        var url = this._url;
+        if (data && data === Object(data) /* && check for content-type */) {
+            var d = queryParam(data);
+            url += d;
+        }
+        this._xhr.open(this._method, url, true);
+        this._xhr.send(data);
         return defer.promise;
     };
     Request.prototype.json = function (data) {

@@ -1,7 +1,7 @@
 /// <reference path="../node_modules/views/views.d.ts" />
 import FileUploader from './fileuploader'
-import {ViewOptions, View} from 'views/lib/view'
-import {utils} from 'views/lib/utils'
+import {ViewOptions, View, utils} from 'views'
+//import {utils} from 'views/lib/utils'
 
 export interface IProgressView {
   show()

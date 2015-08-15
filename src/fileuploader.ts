@@ -1,7 +1,6 @@
 /// <reference path="typings/tsd.d.ts" />
 
-import {EventEmitter} from 'views/lib/events'
-import {utils} from 'views/lib/utils'
+import {EventEmitter, utils} from 'views'
 import {ajax} from './utilities'
 import {Request} from './request'
 

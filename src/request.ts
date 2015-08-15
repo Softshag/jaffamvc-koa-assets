@@ -11,6 +11,10 @@ export interface Deferrable<U> {
   resolve: (result:U) => void
 }
 
+export function queryParam ( obj ): string {
+  return '?'+Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&')
+}
+
 function deferred<U>(): Deferrable<U> {
   let resolve, reject, promise = new Promise<U>(function (res, rej) {
     resolve = res, reject = rej
@@ -29,16 +33,16 @@ var isValid = function(xhr, url) {
       (xhr.status === 0 && fileProto.test(url));
       //(xhr.status === 0 && window.location.protocol === 'file:')
   };
-  
+
 export class Request {
-   
+
     private _xhr: XMLHttpRequest
     private _data: any
     constructor (private _method: string, private _url: string) {
       this._xhr = ajax()
     }
-    
-    send (data): Request {
+
+    send (data:any): Request {
       this._data = data;
       return this;
     }
@@ -48,7 +52,7 @@ export class Request {
       return this;
     }
 
-    end (data): Promise<string> {
+    end (data?:any): Promise<string> {
       this._data = data||this._data;
 
       let defer = deferred<string>();
@@ -59,46 +63,55 @@ export class Request {
         if (!isValid(this._xhr, this._url)) {
           return defer.reject(new Error('server responded with: ' + this._xhr.status));
         }
-        
-   
+
+
         defer.resolve(this._xhr.responseText);
 
       });
 
-      this._xhr.open(this._method, this._url, true);
+      data = this._data;
+      let url = this._url;
+      if (data && data === Object(data) /* && check for content-type */) {
+        let d = queryParam(data)
+        url += d
+      }
 
-      this._xhr.send(this._data);
+      this._xhr.open(this._method, url, true);
+
+
+
+      this._xhr.send(data);
 
       return defer.promise;
 
     }
-    
+
     json (data?: any): Promise<Object> {
-      
+
       return this.end(data)
       .then<Object>((str) => {
         let accepts = this._xhr.getResponseHeader('content-type')
-        
+
         if (jsonRe.test(accepts) && str !== '') {
           let json = JSON.parse(str)
           return json
         } else {
           throw new Error('json')
         }
-        
-      
+
+
       })
     }
-    
+
     progress (fn) {
       this._xhr.addEventListener('progress', fn);
       return this;
     }
-    
+
     header (field: string, value: string): Request {
       this._xhr.setRequestHeader(field,value)
       return this
-    }  
+    }
   }
 
 
@@ -115,7 +128,7 @@ export module request {
   export function put (url): Request {
       return new Request('PUT', url)
     }
-    
+
     export function del (url): Request {
       return new Request('DELETE', url)
     }

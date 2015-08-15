@@ -1,12 +1,13 @@
-/// <reference path="../typings/tsd.d.ts" />
-import { EventEmitter } from 'views/lib/events';
+/// <reference path="typings/tsd.d.ts" />
+import { EventEmitter } from 'views';
 export declare enum HttpMethod {
     GET = 0,
     POST = 1,
     PUT = 2,
     DELETE = 3,
 }
-export declare class HttpError extends Error {
+export declare class HttpError implements Error {
+    name: string;
     message: string;
     code: number;
     constructor(message: string, code: number);
@@ -25,6 +26,6 @@ export interface FileUploadProgress {
 export default class FileUploader extends EventEmitter {
     options: FileUploaderOptions;
     constructor(options: FileUploaderOptions);
-    upload(file: File, progressFn?: FileUploadProgress, attributes?: Object): Promise<FileUploadResult>;
+    upload(file: File, progressFn?: FileUploadProgress, attributes?: Object): Promise<Object>;
     private _validateFile(file);
 }

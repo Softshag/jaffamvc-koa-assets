@@ -1,6 +1,6 @@
 'use strict'
 
-console.log(Assets)
+
 
 var button = new Assets.UploadButton({
   autoUpload: true,
@@ -14,31 +14,38 @@ var collection = new Assets.AssetsCollection(null,{
   url: '/files'
 });
 
+collection.fetch().then(function () {
+  console.log('done', collection)
+})
+
+
 button.on('upload', function (asset) {
   collection.add(asset)
 })
 
-collection.fetch().then(function () {
-  console.log('done', collection)
-})
+
 
 var view = new Assets.AssetsListView({
   collection: collection
 });
 
+var preview = new Assets.AssetsPreview();
+
+
 view.on('selected', function (view, model) {
-  console.log('selected', model.toJSON())
+  //console.log('selected', model.toJSON())
+  preview.model = model
 })
 
 
-var preview = new Assets.AssetsPreview();
 
 
 
 
 var container = document.getElementById("container")
+
 container.appendChild(button.render().el)
-container.appendChild(view.render().el)
-container.appendChild(preview.render().el);
+document.querySelector('.gallery-list').appendChild(view.render().el)
+document.querySelector('.gallery-preview').appendChild(preview.render().el);
 //console.log(button.el)
 //button.render().appendTo(container)

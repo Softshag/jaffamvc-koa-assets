@@ -1,6 +1,6 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../node_modules/views/views.d.ts" />
 import FileUploader from './fileuploader';
-import { ViewOptions, View } from 'views/lib/view';
+import { ViewOptions, View } from 'views';
 export interface IProgressView {
     show(): any;
     hide(): any;
@@ -22,9 +22,6 @@ export interface UploadButtonOptions extends ViewOptions {
 }
 export declare function createButton(options: UploadButtonOptions): any;
 export declare class UploadButton extends View<HTMLInputElement> {
-    events: {
-        'change': string;
-    };
     options: UploadButtonOptions;
     progressView: IProgressView;
     errorView: IMessageView;

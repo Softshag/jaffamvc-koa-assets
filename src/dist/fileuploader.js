@@ -5,8 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var events_1 = require('views/lib/events');
-var utils_1 = require('views/lib/utils');
+var views_1 = require('views');
 var request_1 = require('./request');
 (function (HttpMethod) {
     HttpMethod[HttpMethod["GET"] = 0] = "GET";
@@ -27,7 +26,7 @@ var FileUploader = (function (_super) {
     __extends(FileUploader, _super);
     function FileUploader(options) {
         _super.call(this);
-        this.options = utils_1.utils.extend({}, {
+        this.options = views_1.utils.extend({}, {
             parameter: 'file',
             method: HttpMethod.POST,
             maxSize: 2048
@@ -138,7 +137,7 @@ var FileUploader = (function (_super) {
         }
     };
     return FileUploader;
-})(events_1.EventEmitter);
+})(views_1.EventEmitter);
 exports.default = FileUploader;
 function formatResponse(response) {
     var ret = null;

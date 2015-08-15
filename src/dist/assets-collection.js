@@ -5,8 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = new __();
 };
 /// <reference path="../node_modules/views/views.d.ts" />
-var collection_1 = require('views/lib/collection');
-var model_1 = require('views/lib/model');
+var views_1 = require('views');
 var request_1 = require('./request');
 var AssetsModel = (function (_super) {
     __extends(AssetsModel, _super);
@@ -15,7 +14,7 @@ var AssetsModel = (function (_super) {
         this.idAttribute = 'path';
     }
     return AssetsModel;
-})(model_1.Model);
+})(views_1.Model);
 exports.AssetsModel = AssetsModel;
 var AssetsCollection = (function (_super) {
     __extends(AssetsCollection, _super);
@@ -40,5 +39,5 @@ var AssetsCollection = (function (_super) {
         });
     };
     return AssetsCollection;
-})(collection_1.Collection);
+})(views_1.Collection);
 exports.AssetsCollection = AssetsCollection;
