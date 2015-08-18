@@ -25,7 +25,7 @@ button.on('upload', function (asset) {
 
 
 
-var view = new Assets.AssetsListView({
+/*var view = new Assets.AssetsListView({
   collection: collection
 });
 
@@ -41,11 +41,18 @@ view.on('selected', function (view, model) {
 
 
 
-
+*/
 var container = document.getElementById("container")
-
+/*
 container.appendChild(button.render().el)
 document.querySelector('.gallery-list').appendChild(view.render().el)
 document.querySelector('.gallery-preview').appendChild(preview.render().el);
 //console.log(button.el)
 //button.render().appendTo(container)
+*/
+
+var gallery = new Assets.GalleryView({
+  url: '/files'
+});
+console.log(gallery)
+container.appendChild(gallery.render().el);

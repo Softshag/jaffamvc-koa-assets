@@ -4,6 +4,8 @@ import {truncate} from './utilities'
 import {AssetsModel} from './assets-collection';
 import {AssetListItemTemplate} from './templates'
 import {Thumbnailer} from './thumbnailer';
+import {attributes} from './gallery'
+
 
 export interface AssetsListOptions extends CollectionViewOptions {
 	deleteable?: boolean
@@ -18,6 +20,8 @@ const MimeList = {
 	'video/x-m4v': 'video-generic',
 	'video/quicktime': 'video-generic'
 }
+
+
 
 export const AssetsListItem = DataView.extend({
 	template: AssetListItemTemplate,
@@ -43,14 +47,14 @@ export const AssetsListItem = DataView.extend({
 			html.removeClass(this.ui.mime, 'mime-unknown')
 		}
 
-		this.ui.name.innerText = truncate(model.get('name'), 15)
+		this.ui.name.innerText = truncate(model.get('name'), 25)
 
 		Thumbnailer.request(model)
 		.then((test) => {
 			let image = new Image();
 			image.src = 'data:image/png;base64,' + test
-			image.style.maxHeight = '96px'
-			image.style.maxWidth = '96px'
+			//image.style.maxHeight = '96px'
+			//image.style.maxWidth = '96px'
 			this.ui.mime.parentNode.replaceChild(image, this.ui.mime);
 		}).catch((e) => {
 			console.log(e)
@@ -58,17 +62,22 @@ export const AssetsListItem = DataView.extend({
 	}
 })
 
-export const AssetsListView = CollectionView.extend({
-	className: 'assets-list collection-mode',
-	childView: AssetsListItem,
+
+@attributes({className:'assets-list collection-mode', childView: AssetsListItem})
+export class AssetsListView extends CollectionView<HTMLDivElement> {
+	_current: DataView<HTMLDivElement>
 	constructor (options?:AssetsListOptions) {
-		CollectionView.call(this, options);
+		super(options);
 		this.sort = true
-		this.listenTo(this, 'childview:click', function ({model, view}) {
+	
+		this.listenTo(this, 'childview:click', function (view, model) {
+			if (this._current) html.removeClass(this._current.el, 'active')
+			this._current = view
+			html.addClass(view.el, 'active')		
 			this.trigger('selected', view, model);
 		});
 
-		this.listenTo(this, 'childview:remove', function ({model, view}) {
+		this.listenTo(this, 'childview:remove', function (view, model) {
 
 			if (options.deleteable === true) {
 				let remove = true;
@@ -81,5 +90,4 @@ export const AssetsListView = CollectionView.extend({
 			}
 		});
 	}
-
-})
+}

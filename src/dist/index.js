@@ -11,3 +11,4 @@ __export(require('./filebutton'));
 __export(require('./assets-collection'));
 __export(require('./assets-list'));
 __export(require('./assets-preview'));
+__export(require('./gallery'));

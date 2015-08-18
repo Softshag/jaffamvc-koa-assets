@@ -32,5 +32,10 @@ export const AssetListItemTemplate = `
 <div class="thumbnail-container">
 	<i class="mime-type mime-unknown"></i>
 </div>
-<span class="name"></span>
+<div class="name"></div>
 `
+
+export const gallery = `
+<div class="gallery-list"></div>
+<div class="gallery-preview"></div>
+<div class="gallery-upload"></div>`

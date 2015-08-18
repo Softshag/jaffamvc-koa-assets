@@ -4,7 +4,7 @@ import {IDataView} from 'views/lib/types'
 import {truncate,humanFileSize} from './utilities'
 import {AssetsModel} from './assets-collection'
 import {PreviewTemplate, PreviewInfoTemplate} from './templates'
-
+import {Thumbnailer, MimeList} from './thumbnailer'
 export interface PreviewInfoOptions extends DataViewOptions {
 
 }
@@ -58,6 +58,7 @@ export interface AssetsPreviewOptions extends TemplateViewOptions {
 	infoViewOptions?: PreviewInfoOptions
 }
 
+
 export class AssetsPreview extends LayoutView<HTMLDivElement> {
 	private _model: AssetsModel
 	private infoView: IDataView
@@ -80,6 +81,17 @@ export class AssetsPreview extends LayoutView<HTMLDivElement> {
 
 		} else {
 			region.empty()
+			let image = new Image();
+			image.style.maxHeight = '96px'
+			image.style.maxWidth = '96px'
+			region.el.appendChild(image);
+			
+			Thumbnailer.request(model)
+			.then((test) => {
+				image.src = 'data:image/png;base64,' + test
+			}).catch((e) => {
+				console.log(e)
+			})
 		}
 
 	}

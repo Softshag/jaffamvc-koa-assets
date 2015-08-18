@@ -57,42 +57,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	var views_1 = __webpack_require__(1);
-	__webpack_require__(15);
+	var views_1 = __webpack_require__(2);
+	__webpack_require__(18);
 	views_1.EventEmitter.debugCallback = function (name, _, event, args) {
 	    //console.log(arguments)
 	};
-	__export(__webpack_require__(19));
-	__export(__webpack_require__(21));
 	__export(__webpack_require__(22));
 	__export(__webpack_require__(23));
-	__export(__webpack_require__(16));
+	__export(__webpack_require__(1));
+	__export(__webpack_require__(24));
+	__export(__webpack_require__(19));
+	__export(__webpack_require__(25));
 
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	function __export(m) {
-	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-	}
-	__export(__webpack_require__(2));
-	__export(__webpack_require__(7));
-	__export(__webpack_require__(6));
-	__export(__webpack_require__(5));
-	__export(__webpack_require__(4));
-	__export(__webpack_require__(3));
-	__export(__webpack_require__(8));
-	__export(__webpack_require__(9));
-	__export(__webpack_require__(10));
-	__export(__webpack_require__(11));
-	__export(__webpack_require__(12));
-	__export(__webpack_require__(13));
-	__export(__webpack_require__(14));
-
-
-/***/ },
-/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -101,8 +80,79 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var base = __webpack_require__(3);
-	var utils_1 = __webpack_require__(6);
+	/// <reference path="../node_modules/views/views.d.ts" />
+	var views_1 = __webpack_require__(2);
+	var request_1 = __webpack_require__(16);
+	var AssetsModel = (function (_super) {
+	    __extends(AssetsModel, _super);
+	    function AssetsModel() {
+	        _super.apply(this, arguments);
+	        this.idAttribute = 'path';
+	    }
+	    return AssetsModel;
+	})(views_1.Model);
+	exports.AssetsModel = AssetsModel;
+	var AssetsCollection = (function (_super) {
+	    __extends(AssetsCollection, _super);
+	    function AssetsCollection(models, options) {
+	        _super.call(this, models, options);
+	        this.Model = AssetsModel;
+	        this.comparator = 'name';
+	        this.url = options.url;
+	    }
+	    AssetsCollection.prototype.fetch = function (options) {
+	        var _this = this;
+	        if (options === void 0) { options = {}; }
+	        return request_1.request.get(this.url)
+	            .progress(function (e) {
+	            console.log(e);
+	        })
+	            .json().then(function (result) {
+	            if (!Array.isArray(result)) {
+	                throw new Error('invalid format: expected json array');
+	            }
+	            _this.add(result);
+	        });
+	    };
+	    return AssetsCollection;
+	})(views_1.Collection);
+	exports.AssetsCollection = AssetsCollection;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	function __export(m) {
+	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+	}
+	__export(__webpack_require__(3));
+	__export(__webpack_require__(8));
+	__export(__webpack_require__(7));
+	__export(__webpack_require__(6));
+	__export(__webpack_require__(5));
+	__export(__webpack_require__(4));
+	__export(__webpack_require__(9));
+	__export(__webpack_require__(10));
+	__export(__webpack_require__(11));
+	__export(__webpack_require__(12));
+	__export(__webpack_require__(13));
+	__export(__webpack_require__(14));
+	__export(__webpack_require__(15));
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    __.prototype = b.prototype;
+	    d.prototype = new __();
+	};
+	var base = __webpack_require__(4);
+	var utils_1 = __webpack_require__(7);
 	var kUIRegExp = /@ui.([a-zA-Z_\-\$#]+)/i;
 	function normalizeUIKeys(obj, uimap) {
 	    /*jshint -W030 */
@@ -232,7 +282,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -241,8 +291,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var object_1 = __webpack_require__(4);
-	var utils_1 = __webpack_require__(6);
+	var object_1 = __webpack_require__(5);
+	var utils_1 = __webpack_require__(7);
 	var paddedLt = /^\s*</;
 	var unbubblebles = 'focus blur change'.split(' ');
 	var viewOptions = ['el', 'id', 'attributes', 'className', 'tagName', 'events'];
@@ -471,7 +521,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -480,8 +530,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var events_1 = __webpack_require__(5);
-	var utils_1 = __webpack_require__(6);
+	var events_1 = __webpack_require__(6);
+	var utils_1 = __webpack_require__(7);
 	/** Base object */
 	var BaseObject = (function (_super) {
 	    __extends(BaseObject, _super);
@@ -549,7 +599,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	var idCounter = 0;
@@ -661,7 +711,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	var ElementProto = (typeof Element !== 'undefined' && Element.prototype) || {};
@@ -1038,7 +1088,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -1047,7 +1097,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var views = __webpack_require__(2);
+	var views = __webpack_require__(3);
 	var TemplateView = (function (_super) {
 	    __extends(TemplateView, _super);
 	    /** TemplateView
@@ -1092,7 +1142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* global BaseClass */
@@ -1103,8 +1153,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var object_1 = __webpack_require__(4);
-	var utils_1 = __webpack_require__(6);
+	var object_1 = __webpack_require__(5);
+	var utils_1 = __webpack_require__(7);
 	/** Region  */
 	var Region = (function (_super) {
 	    __extends(Region, _super);
@@ -1243,7 +1293,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* global BaseClass, __has */
@@ -1253,9 +1303,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var object_1 = __webpack_require__(4);
-	var region_1 = __webpack_require__(8);
-	var utils_1 = __webpack_require__(6);
+	var object_1 = __webpack_require__(5);
+	var region_1 = __webpack_require__(9);
+	var utils_1 = __webpack_require__(7);
 	var RegionManager = (function (_super) {
 	    __extends(RegionManager, _super);
 	    /** Region manager
@@ -1349,7 +1399,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -1359,10 +1409,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = new __();
 	};
 	/*global View, RegionManager, Region*/
-	var templateview_1 = __webpack_require__(7);
-	var region_manager_1 = __webpack_require__(9);
-	var utils_1 = __webpack_require__(6);
-	var region_1 = __webpack_require__(8);
+	var templateview_1 = __webpack_require__(8);
+	var region_manager_1 = __webpack_require__(10);
+	var utils_1 = __webpack_require__(7);
+	var region_1 = __webpack_require__(9);
 	var LayoutView = (function (_super) {
 	    __extends(LayoutView, _super);
 	    /**
@@ -1429,7 +1479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -1438,8 +1488,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var templateview_1 = __webpack_require__(7);
-	var utils_1 = __webpack_require__(6);
+	var templateview_1 = __webpack_require__(8);
+	var utils_1 = __webpack_require__(7);
 	var DataView = (function (_super) {
 	    __extends(DataView, _super);
 	    /**
@@ -1448,6 +1498,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @extends TemplateView
 	     */
 	    function DataView(options) {
+	        options = options||{};
 	        if (options.model) {
 	            this.model = options.model;
 	        }
@@ -1563,7 +1614,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -1572,9 +1623,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var data_view_1 = __webpack_require__(11);
-	var utils_1 = __webpack_require__(6);
-	var events_1 = __webpack_require__(5);
+	var data_view_1 = __webpack_require__(12);
+	var utils_1 = __webpack_require__(7);
+	var events_1 = __webpack_require__(6);
 	var Buffer = (function () {
 	    function Buffer() {
 	        this.children = [];
@@ -1867,7 +1918,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -1876,8 +1927,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var utils_1 = __webpack_require__(6);
-	var object_1 = __webpack_require__(4);
+	var utils_1 = __webpack_require__(7);
+	var object_1 = __webpack_require__(5);
 	var Model = (function (_super) {
 	    __extends(Model, _super);
 	    function Model(attributes, options) {
@@ -2030,7 +2081,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -2039,9 +2090,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var object_1 = __webpack_require__(4);
-	var utils_1 = __webpack_require__(6);
-	var model_1 = __webpack_require__(13);
+	var object_1 = __webpack_require__(5);
+	var utils_1 = __webpack_require__(7);
+	var model_1 = __webpack_require__(14);
 	var setOptions = { add: true, remove: true, merge: true };
 	var addOptions = { add: true, remove: false };
 	var Collection = (function (_super) {
@@ -2321,11 +2372,177 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var views_1 = __webpack_require__(1);
-	var assets_preview_1 = __webpack_require__(16);
+	var utilities_1 = __webpack_require__(17);
+	var xmlRe = /^(?:application|text)\/xml/, jsonRe = /^application\/json/, fileProto = /^file:/;
+	function queryParam(obj) {
+	    return '?' + Object.keys(obj).reduce(function (a, k) { a.push(k + '=' + encodeURIComponent(obj[k])); return a; }, []).join('&');
+	}
+	exports.queryParam = queryParam;
+	function deferred() {
+	    var resolve, reject, promise = new Promise(function (res, rej) {
+	        resolve = res, reject = rej;
+	    });
+	    return { resolve: resolve, reject: reject, promise: promise,
+	        done: function (error, result) {
+	            if (error)
+	                return reject(error);
+	            resolve(result);
+	        }
+	    };
+	}
+	var isValid = function (xhr, url) {
+	    return (xhr.status >= 200 && xhr.status < 300) ||
+	        (xhr.status === 304) ||
+	        (xhr.status === 0 && fileProto.test(url));
+	    //(xhr.status === 0 && window.location.protocol === 'file:')
+	};
+	var Request = (function () {
+	    function Request(_method, _url) {
+	        this._method = _method;
+	        this._url = _url;
+	        this._xhr = utilities_1.ajax();
+	    }
+	    Request.prototype.send = function (data) {
+	        this._data = data;
+	        return this;
+	    };
+	    Request.prototype.withCredentials = function (ret) {
+	        this._xhr.withCredentials = ret;
+	        return this;
+	    };
+	    Request.prototype.end = function (data) {
+	        var _this = this;
+	        this._data = data || this._data;
+	        var defer = deferred();
+	        this._xhr.addEventListener('readystatechange', function () {
+	            if (_this._xhr.readyState !== XMLHttpRequest.DONE)
+	                return;
+	            if (!isValid(_this._xhr, _this._url)) {
+	                return defer.reject(new Error('server responded with: ' + _this._xhr.status));
+	            }
+	            defer.resolve(_this._xhr.responseText);
+	        });
+	        data = this._data;
+	        var url = this._url;
+	        if (data && data === Object(data) /* && check for content-type */) {
+	            var d = queryParam(data);
+	            url += d;
+	        }
+	        this._xhr.open(this._method, url, true);
+	        this._xhr.send(data);
+	        return defer.promise;
+	    };
+	    Request.prototype.json = function (data) {
+	        var _this = this;
+	        return this.end(data)
+	            .then(function (str) {
+	            var accepts = _this._xhr.getResponseHeader('content-type');
+	            if (jsonRe.test(accepts) && str !== '') {
+	                var json = JSON.parse(str);
+	                return json;
+	            }
+	            else {
+	                throw new Error('json');
+	            }
+	        });
+	    };
+	    Request.prototype.progress = function (fn) {
+	        this._xhr.addEventListener('progress', fn);
+	        return this;
+	    };
+	    Request.prototype.header = function (field, value) {
+	        this._xhr.setRequestHeader(field, value);
+	        return this;
+	    };
+	    return Request;
+	})();
+	exports.Request = Request;
+	var request;
+	(function (request) {
+	    function get(url) {
+	        return new Request('GET', url);
+	    }
+	    request.get = get;
+	    function post(url) {
+	        return new Request('POST', url);
+	    }
+	    request.post = post;
+	    function put(url) {
+	        return new Request('PUT', url);
+	    }
+	    request.put = put;
+	    function del(url) {
+	        return new Request('DELETE', url);
+	    }
+	    request.del = del;
+	})(request = exports.request || (exports.request = {}));
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	/// <reference path="typings/tsd.d.ts" />
+	function ajax() {
+	    var e;
+	    if (window.hasOwnProperty('XMLHttpRequest')) {
+	        return new XMLHttpRequest();
+	    }
+	    try {
+	        return new ActiveXObject('msxml2.xmlhttp.6.0');
+	    }
+	    catch (_error) {
+	        e = _error;
+	    }
+	    try {
+	        return new ActiveXObject('msxml2.xmlhttp.3.0');
+	    }
+	    catch (_error) {
+	        e = _error;
+	    }
+	    try {
+	        return new ActiveXObject('msxml2.xmlhttp');
+	    }
+	    catch (_error) {
+	        e = _error;
+	    }
+	    return e;
+	}
+	exports.ajax = ajax;
+	;
+	function truncate(str, length) {
+	    var n = str.substring(0, Math.min(length, str.length));
+	    return n + (n.length == str.length ? '' : '...');
+	}
+	exports.truncate = truncate;
+	function humanFileSize(bytes, si) {
+	    if (si === void 0) { si = false; }
+	    var thresh = si ? 1000 : 1024;
+	    if (Math.abs(bytes) < thresh) {
+	        return bytes + ' B';
+	    }
+	    var units = si
+	        ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+	        : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+	    var u = -1;
+	    do {
+	        bytes /= thresh;
+	        ++u;
+	    } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+	    return bytes.toFixed(1) + ' ' + units[u];
+	}
+	exports.humanFileSize = humanFileSize;
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var views_1 = __webpack_require__(2);
+	var assets_preview_1 = __webpack_require__(19);
 	assets_preview_1.setPreviewHandler('image/*', views_1.DataView.extend({
 	    template: function (data) {
 	        return "<img src=\"" + data.url + "\"/>";
@@ -2344,7 +2561,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 16 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -2354,9 +2571,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = new __();
 	};
 	/// <reference path="../node_modules/views/views.d.ts" />
-	var views_1 = __webpack_require__(1);
+	var views_1 = __webpack_require__(2);
 	var utilities_1 = __webpack_require__(17);
-	var templates_1 = __webpack_require__(18);
+	var templates_1 = __webpack_require__(20);
+	var thumbnailer_1 = __webpack_require__(21);
 	exports.AssetsInfoPreview = views_1.DataView.extend({
 	    ui: {
 	        name: '.name',
@@ -2429,6 +2647,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            else {
 	                region.empty();
+	                var image = new Image();
+	                image.style.maxHeight = '96px';
+	                image.style.maxWidth = '96px';
+	                region.el.appendChild(image);
+	                thumbnailer_1.Thumbnailer.request(model)
+	                    .then(function (test) {
+	                    image.src = 'data:image/png;base64,' + test;
+	                }).catch(function (e) {
+	                    console.log(e);
+	                });
 	            }
 	        },
 	        enumerable: true,
@@ -2448,72 +2676,45 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 17 */
-/***/ function(module, exports) {
-
-	/// <reference path="typings/tsd.d.ts" />
-	function ajax() {
-	    var e;
-	    if (window.hasOwnProperty('XMLHttpRequest')) {
-	        return new XMLHttpRequest();
-	    }
-	    try {
-	        return new ActiveXObject('msxml2.xmlhttp.6.0');
-	    }
-	    catch (_error) {
-	        e = _error;
-	    }
-	    try {
-	        return new ActiveXObject('msxml2.xmlhttp.3.0');
-	    }
-	    catch (_error) {
-	        e = _error;
-	    }
-	    try {
-	        return new ActiveXObject('msxml2.xmlhttp');
-	    }
-	    catch (_error) {
-	        e = _error;
-	    }
-	    return e;
-	}
-	exports.ajax = ajax;
-	;
-	function truncate(str, length) {
-	    var n = str.substring(0, Math.min(length, str.length));
-	    return n + (n.length == str.length ? '' : '...');
-	}
-	exports.truncate = truncate;
-	function humanFileSize(bytes, si) {
-	    if (si === void 0) { si = false; }
-	    var thresh = si ? 1000 : 1024;
-	    if (Math.abs(bytes) < thresh) {
-	        return bytes + ' B';
-	    }
-	    var units = si
-	        ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-	        : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-	    var u = -1;
-	    do {
-	        bytes /= thresh;
-	        ++u;
-	    } while (Math.abs(bytes) >= thresh && u < units.length - 1);
-	    return bytes.toFixed(1) + ' ' + units[u];
-	}
-	exports.humanFileSize = humanFileSize;
-
-
-/***/ },
-/* 18 */
+/* 20 */
 /***/ function(module, exports) {
 
 	exports.PreviewTemplate = "\n<div class=\"preview-region\">\n</div>\n<div class=\"info-region\">\n</div>\n";
 	exports.PreviewInfoTemplate = "\n<table>\n\t\t<tr>\n\t\t\t<td>Name</td>\n\t\t\t<td class=\"name\"></td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>Mime</td>\n\t\t\t<td class=\"mime\"></td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>Size</td>\n\t\t\t<td class=\"size\"></td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>Download</td>\n\t\t\t<td class=\"download\"><a></a></td>\n\t\t</tr>\n\t</table>\n";
-	exports.AssetListItemTemplate = "\n<div class=\"thumbnail-container\">\n\t<i class=\"mime-type mime-unknown\"></i>\n</div>\n<span class=\"name\"></span>\n";
+	exports.AssetListItemTemplate = "\n<div class=\"thumbnail-container\">\n\t<i class=\"mime-type mime-unknown\"></i>\n</div>\n<div class=\"name\"></div>\n";
+	exports.gallery = "\n<div class=\"gallery-list\"></div>\n<div class=\"gallery-preview\"></div>\n<div class=\"gallery-upload\"></div>";
 
 
 /***/ },
-/* 19 */
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var request_1 = __webpack_require__(16);
+	exports.MimeList = {
+	    'audio/mpeg': 'audio-generic',
+	    'audio/ogg': 'audio-generic',
+	    'application/pdf': 'application-pdf',
+	    'video/ogg': 'video-generic',
+	    'video/mp4': 'video-generic',
+	    'video/x-m4v': 'video-generic',
+	    'video/quicktime': 'video-generic'
+	};
+	var Thumbnailer = (function () {
+	    function Thumbnailer() {
+	    }
+	    Thumbnailer.request = function (asset) {
+	        return request_1.request.get('/files/' + asset.get('path')).end({
+	            thumbnail: true,
+	            base64: true
+	        });
+	    };
+	    return Thumbnailer;
+	})();
+	exports.Thumbnailer = Thumbnailer;
+
+
+/***/ },
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/// <reference path="typings/tsd.d.ts" />
@@ -2523,8 +2724,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var views_1 = __webpack_require__(1);
-	var request_1 = __webpack_require__(20);
+	var views_1 = __webpack_require__(2);
+	var request_1 = __webpack_require__(16);
 	(function (HttpMethod) {
 	    HttpMethod[HttpMethod["GET"] = 0] = "GET";
 	    HttpMethod[HttpMethod["POST"] = 1] = "POST";
@@ -2670,117 +2871,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var utilities_1 = __webpack_require__(17);
-	var xmlRe = /^(?:application|text)\/xml/, jsonRe = /^application\/json/, fileProto = /^file:/;
-	function queryParam(obj) {
-	    return '?' + Object.keys(obj).reduce(function (a, k) { a.push(k + '=' + encodeURIComponent(obj[k])); return a; }, []).join('&');
-	}
-	exports.queryParam = queryParam;
-	function deferred() {
-	    var resolve, reject, promise = new Promise(function (res, rej) {
-	        resolve = res, reject = rej;
-	    });
-	    return { resolve: resolve, reject: reject, promise: promise,
-	        done: function (error, result) {
-	            if (error)
-	                return reject(error);
-	            resolve(result);
-	        }
-	    };
-	}
-	var isValid = function (xhr, url) {
-	    return (xhr.status >= 200 && xhr.status < 300) ||
-	        (xhr.status === 304) ||
-	        (xhr.status === 0 && fileProto.test(url));
-	    //(xhr.status === 0 && window.location.protocol === 'file:')
-	};
-	var Request = (function () {
-	    function Request(_method, _url) {
-	        this._method = _method;
-	        this._url = _url;
-	        this._xhr = utilities_1.ajax();
-	    }
-	    Request.prototype.send = function (data) {
-	        this._data = data;
-	        return this;
-	    };
-	    Request.prototype.withCredentials = function (ret) {
-	        this._xhr.withCredentials = ret;
-	        return this;
-	    };
-	    Request.prototype.end = function (data) {
-	        var _this = this;
-	        this._data = data || this._data;
-	        var defer = deferred();
-	        this._xhr.addEventListener('readystatechange', function () {
-	            if (_this._xhr.readyState !== XMLHttpRequest.DONE)
-	                return;
-	            if (!isValid(_this._xhr, _this._url)) {
-	                return defer.reject(new Error('server responded with: ' + _this._xhr.status));
-	            }
-	            defer.resolve(_this._xhr.responseText);
-	        });
-	        data = this._data;
-	        var url = this._url;
-	        if (data && data === Object(data) /* && check for content-type */) {
-	            var d = queryParam(data);
-	            url += d;
-	        }
-	        this._xhr.open(this._method, url, true);
-	        this._xhr.send(data);
-	        return defer.promise;
-	    };
-	    Request.prototype.json = function (data) {
-	        var _this = this;
-	        return this.end(data)
-	            .then(function (str) {
-	            var accepts = _this._xhr.getResponseHeader('content-type');
-	            if (jsonRe.test(accepts) && str !== '') {
-	                var json = JSON.parse(str);
-	                return json;
-	            }
-	            else {
-	                throw new Error('json');
-	            }
-	        });
-	    };
-	    Request.prototype.progress = function (fn) {
-	        this._xhr.addEventListener('progress', fn);
-	        return this;
-	    };
-	    Request.prototype.header = function (field, value) {
-	        this._xhr.setRequestHeader(field, value);
-	        return this;
-	    };
-	    return Request;
-	})();
-	exports.Request = Request;
-	var request;
-	(function (request) {
-	    function get(url) {
-	        return new Request('GET', url);
-	    }
-	    request.get = get;
-	    function post(url) {
-	        return new Request('POST', url);
-	    }
-	    request.post = post;
-	    function put(url) {
-	        return new Request('PUT', url);
-	    }
-	    request.put = put;
-	    function del(url) {
-	        return new Request('DELETE', url);
-	    }
-	    request.del = del;
-	})(request = exports.request || (exports.request = {}));
-
-
-/***/ },
-/* 21 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -2790,8 +2881,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = new __();
 	};
 	/// <reference path="../node_modules/views/views.d.ts" />
-	var fileuploader_1 = __webpack_require__(19);
-	var views_1 = __webpack_require__(1);
+	var fileuploader_1 = __webpack_require__(22);
+	var views_1 = __webpack_require__(2);
 	var defaults = { maxSize: 2048, mimeType: '*', autoUpload: false };
 	var MessageView = (function (_super) {
 	    __extends(MessageView, _super);
@@ -2910,7 +3001,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 22 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -2919,54 +3010,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	/// <reference path="../node_modules/views/views.d.ts" />
-	var views_1 = __webpack_require__(1);
-	var request_1 = __webpack_require__(20);
-	var AssetsModel = (function (_super) {
-	    __extends(AssetsModel, _super);
-	    function AssetsModel() {
-	        _super.apply(this, arguments);
-	        this.idAttribute = 'path';
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
+	    switch (arguments.length) {
+	        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
+	        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
+	        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
 	    }
-	    return AssetsModel;
-	})(views_1.Model);
-	exports.AssetsModel = AssetsModel;
-	var AssetsCollection = (function (_super) {
-	    __extends(AssetsCollection, _super);
-	    function AssetsCollection(models, options) {
-	        _super.call(this, models, options);
-	        this.Model = AssetsModel;
-	        this.comparator = 'name';
-	        this.url = options.url;
-	    }
-	    AssetsCollection.prototype.fetch = function (options) {
-	        var _this = this;
-	        if (options === void 0) { options = {}; }
-	        return request_1.request.get(this.url)
-	            .progress(function (e) {
-	            console.log(e);
-	        })
-	            .json().then(function (result) {
-	            if (!Array.isArray(result)) {
-	                throw new Error('invalid format: expected json array');
-	            }
-	            _this.add(result);
-	        });
-	    };
-	    return AssetsCollection;
-	})(views_1.Collection);
-	exports.AssetsCollection = AssetsCollection;
-
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
 	/// <reference path="../node_modules/views/views.d.ts" />
-	var views_1 = __webpack_require__(1);
+	var views_1 = __webpack_require__(2);
 	var utilities_1 = __webpack_require__(17);
-	var templates_1 = __webpack_require__(18);
-	var thumbnailer_1 = __webpack_require__(24);
+	var templates_1 = __webpack_require__(20);
+	var thumbnailer_1 = __webpack_require__(21);
+	var gallery_1 = __webpack_require__(25);
 	var MimeList = {
 	    'audio/mpeg': 'audio-generic',
 	    'audio/ogg': 'audio-generic',
@@ -2998,31 +3058,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	            views_1.html.addClass(this.ui.mime, 'mime-' + mime);
 	            views_1.html.removeClass(this.ui.mime, 'mime-unknown');
 	        }
-	        this.ui.name.innerText = utilities_1.truncate(model.get('name'), 15);
+	        this.ui.name.innerText = utilities_1.truncate(model.get('name'), 25);
 	        thumbnailer_1.Thumbnailer.request(model)
 	            .then(function (test) {
 	            var image = new Image();
 	            image.src = 'data:image/png;base64,' + test;
-	            image.style.maxHeight = '96px';
-	            image.style.maxWidth = '96px';
+	            //image.style.maxHeight = '96px'
+	            //image.style.maxWidth = '96px'
 	            _this.ui.mime.parentNode.replaceChild(image, _this.ui.mime);
 	        }).catch(function (e) {
 	            console.log(e);
 	        });
 	    }
 	});
-	exports.AssetsListView = views_1.CollectionView.extend({
-	    className: 'assets-list collection-mode',
-	    childView: exports.AssetsListItem,
-	    constructor: function (options) {
-	        views_1.CollectionView.call(this, options);
+	var AssetsListView = (function (_super) {
+	    __extends(AssetsListView, _super);
+	    function AssetsListView(options) {
+	        _super.call(this, options);
 	        this.sort = true;
-	        this.listenTo(this, 'childview:click', function (_a) {
-	            var model = _a.model, view = _a.view;
+	        this.listenTo(this, 'childview:click', function (view, model) {
+	            if (this._current)
+	                views_1.html.removeClass(this._current.el, 'active');
+	            this._current = view;
+	            views_1.html.addClass(view.el, 'active');
 	            this.trigger('selected', view, model);
 	        });
-	        this.listenTo(this, 'childview:remove', function (_a) {
-	            var model = _a.model, view = _a.view;
+	        this.listenTo(this, 'childview:remove', function (view, model) {
 	            if (options.deleteable === true) {
 	                var remove = true;
 	                if (model.has('deleteable')) {
@@ -3035,27 +3096,127 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        });
 	    }
-	});
+	    AssetsListView = __decorate([
+	        gallery_1.attributes({ className: 'assets-list collection-mode', childView: exports.AssetsListItem }), 
+	        __metadata('design:paramtypes', [Object])
+	    ], AssetsListView);
+	    return AssetsListView;
+	})(views_1.CollectionView);
+	exports.AssetsListView = AssetsListView;
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var request_1 = __webpack_require__(20);
-	var Thumbnailer = (function () {
-	    function Thumbnailer() {
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    __.prototype = b.prototype;
+	    d.prototype = new __();
+	};
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
+	    switch (arguments.length) {
+	        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
+	        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
+	        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
 	    }
-	    Thumbnailer.request = function (asset) {
-	        console.log('request');
-	        return request_1.request.get('/files/' + asset.get('path')).end({
-	            thumbnail: true,
-	            base64: true
-	        });
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var views_1 = __webpack_require__(2);
+	var templates = __webpack_require__(20);
+	var assets_list_1 = __webpack_require__(24);
+	var assets_preview_1 = __webpack_require__(19);
+	var assets_collection_1 = __webpack_require__(1);
+	var filebutton_1 = __webpack_require__(23);
+	function template(name) {
+	    return function (target) {
+	        var t;
+	        if (!(t = templates[name])) {
+	            throw new Error('could not find template: ' + template);
+	        }
+	        target.prototype.template = t;
 	    };
-	    return Thumbnailer;
-	})();
-	exports.Thumbnailer = Thumbnailer;
+	}
+	exports.template = template;
+	function attributes(attrs) {
+	    return function (target) {
+	        views_1.utils.extend(target.prototype, attrs);
+	    };
+	}
+	exports.attributes = attributes;
+	var GalleryView = (function (_super) {
+	    __extends(GalleryView, _super);
+	    function GalleryView(options) {
+	        if (options === void 0) { options = {}; }
+	        options.regions = {
+	            list: '.gallery-list',
+	            preview: '.gallery-preview',
+	            upload: '.gallery-upload'
+	        };
+	        if (!options.url && !options.collection) {
+	            throw new Error('either specify url or collection');
+	        }
+	        _super.call(this, options);
+	        var collection = options.collection ? options.collection : new assets_collection_1.AssetsCollection(null, {
+	            url: options.url
+	        });
+	        this.collection = collection;
+	        this._listView = new assets_list_1.AssetsListView({
+	            collection: collection
+	        });
+	        this._preView = new assets_preview_1.AssetsPreview();
+	        this._uploadButton = new filebutton_1.UploadButton({
+	            autoUpload: true,
+	            url: collection.url,
+	            maxSize: 1024 * 1000,
+	        });
+	        this.listenTo(this._listView, 'selected', this._onItemSelect);
+	        this.listenTo(this._listView, 'remove', this._onItemRemove);
+	        this.listenTo(this._uploadButton, 'upload', this._onItemCreate);
+	        collection.fetch();
+	    }
+	    Object.defineProperty(GalleryView.prototype, "listView", {
+	        get: function () {
+	            return this._listView;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(GalleryView.prototype, "preView", {
+	        get: function () {
+	            return this._preView;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    GalleryView.prototype.onRender = function () {
+	        this.regions['list'].show(this._listView);
+	        this.regions['preview'].show(this._preView);
+	        this.regions['upload'].show(this._uploadButton);
+	    };
+	    GalleryView.prototype._onItemCreate = function (asset) {
+	        this.collection.create(asset);
+	    };
+	    GalleryView.prototype._onItemSelect = function (_a) {
+	        var model = _a.model;
+	        console.log('temo');
+	        this._preView.model = model;
+	    };
+	    GalleryView.prototype._onItemRemove = function (_a) {
+	        var model = _a.model;
+	    };
+	    GalleryView = __decorate([
+	        template('gallery'),
+	        attributes({ className: 'assets-gallery gallery', tagName: 'div', ui: { button: '.upload-button' } }), 
+	        __metadata('design:paramtypes', [Object])
+	    ], GalleryView);
+	    return GalleryView;
+	})(views_1.LayoutView);
+	exports.GalleryView = GalleryView;
 
 
 /***/ }

@@ -8,6 +8,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var views_1 = require('views');
 var utilities_1 = require('./utilities');
 var templates_1 = require('./templates');
+var thumbnailer_1 = require('./thumbnailer');
 exports.AssetsInfoPreview = views_1.DataView.extend({
     ui: {
         name: '.name',
@@ -80,6 +81,16 @@ var AssetsPreview = (function (_super) {
             }
             else {
                 region.empty();
+                var image = new Image();
+                image.style.maxHeight = '96px';
+                image.style.maxWidth = '96px';
+                region.el.appendChild(image);
+                thumbnailer_1.Thumbnailer.request(model)
+                    .then(function (test) {
+                    image.src = 'data:image/png;base64,' + test;
+                }).catch(function (e) {
+                    console.log(e);
+                });
             }
         },
         enumerable: true,
