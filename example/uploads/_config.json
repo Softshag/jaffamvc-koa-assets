@@ -1,0 +1,72 @@
+[
+  {
+    "name": "kontrakt.pdf",
+    "path": "kontrakt.pdf",
+    "mime": "application/pdf",
+    "size": 3015477,
+    "url": "http://localhost:3000/files/kontrakt.pdf"
+  },
+  {
+    "name": "Kanban And Scrum.epub",
+    "path": "Kanban_And_Scrum.epub",
+    "mime": "application/epub+zip",
+    "size": 19155911,
+    "url": "http://localhost:3000/files/Kanban_And_Scrum.epub"
+  },
+  {
+    "name": "Clean_Code.pdf",
+    "path": "Clean_Code.pdf",
+    "mime": "application/pdf",
+    "size": 3782924,
+    "url": "http://localhost:3000/files/Clean_Code.pdf"
+  },
+  {
+    "name": "skole.m4v",
+    "path": "skole.m4v",
+    "mime": "video/x-m4v",
+    "size": 3232938,
+    "url": "http://localhost:3000/files/skole.m4v"
+  },
+  {
+    "name": "mq1.jpg",
+    "path": "mq1.jpg",
+    "mime": "image/jpeg",
+    "size": 23859,
+    "url": "http://localhost:3000/files/mq1.jpg"
+  },
+  {
+    "name": "distortion.jpg",
+    "path": "distortion.jpg",
+    "mime": "image/jpeg",
+    "size": 50732,
+    "url": "http://localhost:3000/files/distortion.jpg"
+  },
+  {
+    "name": "iOS Simulator Screen Shot 25.06.2015 20.40.39.png",
+    "path": "iOS_Simulator_Screen_Shot_25.06.2015_20.40.39.png",
+    "mime": "image/png",
+    "size": 83017,
+    "url": "http://localhost:3000/files/iOS_Simulator_Screen_Shot_25.06.2015_20.40.39.png"
+  },
+  {
+    "name": "dataloger.png",
+    "path": "dataloger.png",
+    "mime": "image/png",
+    "size": 587616,
+    "url": "http://localhost:3000/files/dataloger.png"
+  },
+  {
+    "name": "network.pdf",
+    "path": "network.pdf",
+    "mime": "application/pdf",
+    "size": 743025,
+    "url": "http://localhost:3000/files/network.pdf"
+  },
+  {
+    "name": "https-::www.weheartswift.com:swift-objc-magic:.webloc",
+    "path": "https-::www.weheartswift.com:swift-objc-magic:.webloc",
+    "mime": "application/octet-stream",
+    "size": 269,
+    "url": "http://localhost:3000/files/https-::www.weheartswift.com:swift-objc-magic:.webloc"
+  }
+]
