@@ -26,5 +26,12 @@
     "mime": "application/pdf",
     "size": 1601685,
     "url": "http://localhost:3000/files/kontrakt2.pdf"
+  },
+  {
+    "name": "dataloger.png",
+    "path": "dataloger.png",
+    "mime": "image/png",
+    "size": 587616,
+    "url": "http://localhost:3000/files/dataloger.png"
   }
 ]
