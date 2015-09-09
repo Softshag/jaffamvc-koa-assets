@@ -60,61 +60,9 @@ var FileUploader = (function (_super) {
             }
         })
             .json(formData);
-        /*
-        return new Promise<FileUploadResult>((resolve, reject) => {
-
-          let xhr = ajax();
-
-          let method: string = HttpMethod[this.options.method]
-          xhr.open(method,this.options.url)
-
-          xhr.onerror = () => {
-            let error = new HttpError(xhr.statusText, xhr.status)
-            this.trigger('error', error)
-            reject(error);
-          }
-
-          xhr.onreadystatechange = () => {
-            if (xhr.readyState != 4) return
-
-            let response = formatResponse(xhr.responseText)
-
-            if (xhr.status === 200 || xhr.status === 201) {
-              resolve(response)
-              this.trigger('complete');
-            } else {
-
-              reject(response)
-            }
-
-          }
-
-          xhr.upload.onprogress = (event) => {
-            console.log('progress', event)
-            if (event.lengthComputable) {
-              var progress = (event.loaded / event.total * 100 || 0);
-              this.trigger('progress', file, progress);
-              console.log(event, progress)
-              if (progressFn != null) {
-
-                progressFn(event.loaded, event.total)
-              }
-            }
-          }
-
-          xhr.send(formData)
-        });*/
     };
     FileUploader.prototype._validateFile = function (file) {
-        /*if (typeof this.options.maxSize === 'function') {
-          if (!this.options.maxSize(file))
-            return new Error('file too big');
-        } else if ((this.options.maxSize !== 0) &&
-          (file.size > this.options.maxSize))  {
-          return new Error('File too big');
-        }*/
         var maxSize = this.options.maxSize * 1000;
-        console.log("maxsize " + maxSize + ", filesize " + file.size);
         if (maxSize !== 0 && file.size > maxSize) {
             throw new Error('file to big');
         }

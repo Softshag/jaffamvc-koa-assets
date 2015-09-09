@@ -92,7 +92,8 @@ var GalleryView = (function (_super) {
     };
     GalleryView.prototype._onItemSelect = function (_a) {
         var model = _a.model;
-        console.log('temo');
+        if (this._preView.model == model)
+            return;
         this._preView.model = model;
     };
     GalleryView.prototype._onItemRemove = function (_a) {

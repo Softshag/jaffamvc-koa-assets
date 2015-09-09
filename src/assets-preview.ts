@@ -48,6 +48,7 @@ export function setPreviewHandler(mime:string|string[], view: PreviewHandlerCons
 export function getPreviewHandler(mime:string): PreviewHandlerConstructor {
 	let reg: RegExp, k: string;
 	for (k in previewHandlers) {
+		
 		if ((new RegExp(k)).test(mime)) return previewHandlers[k]
 	}
 	return null
@@ -71,24 +72,29 @@ export class AssetsPreview extends LayoutView<HTMLDivElement> {
 		this.infoView.model = model
 
 		let Handler = getPreviewHandler(model.get('mime'))
-
+		
 		let region = this.regions['preview']
-
+		region.empty()
 		if (Handler) {
 			let view = new Handler({model:model})
 			html.addClass(view.el, 'preview')
 			region.show(view)
 
 		} else {
-			region.empty()
+			
+			
 			let image = new Image();
-			image.style.maxHeight = '96px'
-			image.style.maxWidth = '96px'
-			region.el.appendChild(image);
+			
+			let div = document.createElement('div')
+			html.addClass(div, 'preview');
+			
+			region.el.innerHTML = ''
+			region.el.appendChild(div);
 			
 			Thumbnailer.request(model)
 			.then((test) => {
 				image.src = 'data:image/png;base64,' + test
+				div.appendChild(image);
 			}).catch((e) => {
 				console.log(e)
 			})

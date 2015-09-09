@@ -74,20 +74,22 @@ var AssetsPreview = (function (_super) {
             this.infoView.model = model;
             var Handler = getPreviewHandler(model.get('mime'));
             var region = this.regions['preview'];
+            region.empty();
             if (Handler) {
                 var view = new Handler({ model: model });
                 views_1.html.addClass(view.el, 'preview');
                 region.show(view);
             }
             else {
-                region.empty();
                 var image = new Image();
-                image.style.maxHeight = '96px';
-                image.style.maxWidth = '96px';
-                region.el.appendChild(image);
+                var div = document.createElement('div');
+                views_1.html.addClass(div, 'preview');
+                region.el.innerHTML = '';
+                region.el.appendChild(div);
                 thumbnailer_1.Thumbnailer.request(model)
                     .then(function (test) {
                     image.src = 'data:image/png;base64,' + test;
+                    div.appendChild(image);
                 }).catch(function (e) {
                     console.log(e);
                 });

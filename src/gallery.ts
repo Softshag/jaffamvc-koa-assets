@@ -5,6 +5,7 @@ import {AssetsListView} from './assets-list'
 import {AssetsPreview} from './assets-preview'
 import {AssetsCollection} from './assets-collection'
 import {UploadButton} from './filebutton'
+
 export function template (name:string): ClassDecorator {
 	return function <T extends Function>(target:T) {
 		let t
@@ -35,6 +36,7 @@ export class GalleryView extends LayoutView<HTMLDivElement> {
 	private _listView: AssetsListView
 	private _preView: AssetsPreview	
 	private _uploadButton: UploadButton
+	
 	get listView (): AssetsListView {
 		return this._listView
 	}
@@ -86,9 +88,6 @@ export class GalleryView extends LayoutView<HTMLDivElement> {
 		this.regions['preview'].show(this._preView)
 		this.regions['upload'].show(this._uploadButton)
 		
-		
-		
-		
 	}
 	
 	private _onItemCreate (asset) {
@@ -97,7 +96,8 @@ export class GalleryView extends LayoutView<HTMLDivElement> {
 	}
 	
 	private _onItemSelect ({model}) {
-		console.log('temo')
+		if (this._preView.model == model) return
+	
 		this._preView.model = model
 	}
 	

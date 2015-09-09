@@ -53,23 +53,27 @@ export const AssetsListItem = DataView.extend({
 		.then((test) => {
 			let image = new Image();
 			image.src = 'data:image/png;base64,' + test
-			//image.style.maxHeight = '96px'
-			//image.style.maxWidth = '96px'
+			
 			this.ui.mime.parentNode.replaceChild(image, this.ui.mime);
 		}).catch((e) => {
-			console.log(e)
+				console.error(model.get('mime'), e)
 		})
 	}
 })
 
+export const AssetsEmptyView = DataView.extend({
+	template: 'Empty view'
+})
 
-@attributes({className:'assets-list collection-mode', childView: AssetsListItem})
+
+@attributes({className:'assets-list collection-mode', 
+	childView: AssetsListItem, emptyView: AssetsEmptyView })
 export class AssetsListView extends CollectionView<HTMLDivElement> {
 	_current: DataView<HTMLDivElement>
 	constructor (options?:AssetsListOptions) {
 		super(options);
 		this.sort = true
-	
+		
 		this.listenTo(this, 'childview:click', function (view, model) {
 			if (this._current) html.removeClass(this._current.el, 'active')
 			this._current = view

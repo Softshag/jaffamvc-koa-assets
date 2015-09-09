@@ -29,7 +29,6 @@ var AssetsCollection = (function (_super) {
         if (options === void 0) { options = {}; }
         return request_1.request.get(this.url)
             .progress(function (e) {
-            console.log(e);
         })
             .json().then(function (result) {
             if (!Array.isArray(result)) {

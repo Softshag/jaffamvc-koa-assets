@@ -13,7 +13,7 @@ export interface AssetsCollectionFetchOption {
 export class AssetsModel extends Model {
 	idAttribute = 'path'
 }
-
+¨
 export class AssetsCollection extends Collection<AssetsModel> {
 	Model = AssetsModel
 	comparator = 'name'
@@ -28,7 +28,7 @@ export class AssetsCollection extends Collection<AssetsModel> {
 
 		return request.get(this.url)
 		.progress(function (e) {
-			console.log(e)
+		
 		})
 		.json().then((result: Object) => {
 			if (!Array.isArray(result)) {

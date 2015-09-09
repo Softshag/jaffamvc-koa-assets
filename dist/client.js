@@ -105,7 +105,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (options === void 0) { options = {}; }
 	        return request_1.request.get(this.url)
 	            .progress(function (e) {
-	            console.log(e);
 	        })
 	            .json().then(function (result) {
 	            if (!Array.isArray(result)) {
@@ -2640,20 +2639,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.infoView.model = model;
 	            var Handler = getPreviewHandler(model.get('mime'));
 	            var region = this.regions['preview'];
+	            region.empty();
 	            if (Handler) {
 	                var view = new Handler({ model: model });
 	                views_1.html.addClass(view.el, 'preview');
 	                region.show(view);
 	            }
 	            else {
-	                region.empty();
 	                var image = new Image();
-	                image.style.maxHeight = '96px';
-	                image.style.maxWidth = '96px';
-	                region.el.appendChild(image);
+	                var div = document.createElement('div');
+	                views_1.html.addClass(div, 'preview');
+	                region.el.innerHTML = '';
+	                region.el.appendChild(div);
 	                thumbnailer_1.Thumbnailer.request(model)
 	                    .then(function (test) {
 	                    image.src = 'data:image/png;base64,' + test;
+	                    div.appendChild(image);
 	                }).catch(function (e) {
 	                    console.log(e);
 	                });
@@ -2779,61 +2780,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        })
 	            .json(formData);
-	        /*
-	        return new Promise<FileUploadResult>((resolve, reject) => {
-
-	          let xhr = ajax();
-
-	          let method: string = HttpMethod[this.options.method]
-	          xhr.open(method,this.options.url)
-
-	          xhr.onerror = () => {
-	            let error = new HttpError(xhr.statusText, xhr.status)
-	            this.trigger('error', error)
-	            reject(error);
-	          }
-
-	          xhr.onreadystatechange = () => {
-	            if (xhr.readyState != 4) return
-
-	            let response = formatResponse(xhr.responseText)
-
-	            if (xhr.status === 200 || xhr.status === 201) {
-	              resolve(response)
-	              this.trigger('complete');
-	            } else {
-
-	              reject(response)
-	            }
-
-	          }
-
-	          xhr.upload.onprogress = (event) => {
-	            console.log('progress', event)
-	            if (event.lengthComputable) {
-	              var progress = (event.loaded / event.total * 100 || 0);
-	              this.trigger('progress', file, progress);
-	              console.log(event, progress)
-	              if (progressFn != null) {
-
-	                progressFn(event.loaded, event.total)
-	              }
-	            }
-	          }
-
-	          xhr.send(formData)
-	        });*/
 	    };
 	    FileUploader.prototype._validateFile = function (file) {
-	        /*if (typeof this.options.maxSize === 'function') {
-	          if (!this.options.maxSize(file))
-	            return new Error('file too big');
-	        } else if ((this.options.maxSize !== 0) &&
-	          (file.size > this.options.maxSize))  {
-	          return new Error('File too big');
-	        }*/
 	        var maxSize = this.options.maxSize * 1000;
-	        console.log("maxsize " + maxSize + ", filesize " + file.size);
 	        if (maxSize !== 0 && file.size > maxSize) {
 	            throw new Error('file to big');
 	        }
@@ -3063,13 +3012,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            .then(function (test) {
 	            var image = new Image();
 	            image.src = 'data:image/png;base64,' + test;
-	            //image.style.maxHeight = '96px'
-	            //image.style.maxWidth = '96px'
 	            _this.ui.mime.parentNode.replaceChild(image, _this.ui.mime);
 	        }).catch(function (e) {
-	            console.log(e);
+	            console.error(model.get('mime'), e);
 	        });
 	    }
+	});
+	exports.AssetsEmptyView = views_1.DataView.extend({
+	    template: 'Empty view'
 	});
 	var AssetsListView = (function (_super) {
 	    __extends(AssetsListView, _super);
@@ -3097,7 +3047,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    }
 	    AssetsListView = __decorate([
-	        gallery_1.attributes({ className: 'assets-list collection-mode', childView: exports.AssetsListItem }), 
+	        gallery_1.attributes({ className: 'assets-list collection-mode',
+	            childView: exports.AssetsListItem, emptyView: exports.AssetsEmptyView }), 
 	        __metadata('design:paramtypes', [Object])
 	    ], AssetsListView);
 	    return AssetsListView;
@@ -3203,7 +3154,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    GalleryView.prototype._onItemSelect = function (_a) {
 	        var model = _a.model;
-	        console.log('temo');
+	        if (this._preView.model == model)
+	            return;
 	        this._preView.model = model;
 	    };
 	    GalleryView.prototype._onItemRemove = function (_a) {

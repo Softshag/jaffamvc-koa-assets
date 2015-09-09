@@ -57,13 +57,14 @@ exports.AssetsListItem = views_1.DataView.extend({
             .then(function (test) {
             var image = new Image();
             image.src = 'data:image/png;base64,' + test;
-            //image.style.maxHeight = '96px'
-            //image.style.maxWidth = '96px'
             _this.ui.mime.parentNode.replaceChild(image, _this.ui.mime);
         }).catch(function (e) {
-            console.log(e);
+            console.error(model.get('mime'), e);
         });
     }
+});
+exports.AssetsEmptyView = views_1.DataView.extend({
+    template: 'Empty view'
 });
 var AssetsListView = (function (_super) {
     __extends(AssetsListView, _super);
@@ -91,7 +92,8 @@ var AssetsListView = (function (_super) {
         });
     }
     AssetsListView = __decorate([
-        gallery_1.attributes({ className: 'assets-list collection-mode', childView: exports.AssetsListItem }), 
+        gallery_1.attributes({ className: 'assets-list collection-mode',
+            childView: exports.AssetsListItem, emptyView: exports.AssetsEmptyView }), 
         __metadata('design:paramtypes', [Object])
     ], AssetsListView);
     return AssetsListView;

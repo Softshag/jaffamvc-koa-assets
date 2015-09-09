@@ -4,6 +4,7 @@ export interface AssetsListOptions extends CollectionViewOptions {
     deleteable?: boolean;
 }
 export declare const AssetsListItem: any;
+export declare const AssetsEmptyView: any;
 export declare class AssetsListView extends CollectionView<HTMLDivElement> {
     _current: DataView<HTMLDivElement>;
     constructor(options?: AssetsListOptions);

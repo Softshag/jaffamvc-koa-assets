@@ -20,25 +20,35 @@
   height: 100%;
   overflow-y: auto;
 }
-.assets-preview .preview {
+.assets-preview .preview-region {
+  height: 60%;
+}
+.assets-preview .preview-region .preview {
+  height: 100%;
   width: 100%;
   text-align: center;
 }
-.assets-preview .preview img,
-.assets-preview .preview video,
-.assets-preview .preview audio {
+.assets-preview .preview-region .preview img,
+.assets-preview .preview-region .preview video,
+.assets-preview .preview-region .preview audio {
   max-width: 100%;
-  max-height: 250px;
+  max-height: 100%;
 }
-.assets-preview .info {
+.assets-preview .info-region {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid #eee;
+}
+.assets-preview .info-region .info {
   table-layout: fixed;
   width: 100%;
 }
-.assets-preview .info td:first-child {
+.assets-preview .info-region .info td:first-child {
   font-weight: bold;
   vertical-align: baseline;
+  width: 35%;
 }
-.assets-preview .info td:last-child {
+.assets-preview .info-region .info td:last-child {
   word-wrap: break-word;
 }
 .mime-type {
