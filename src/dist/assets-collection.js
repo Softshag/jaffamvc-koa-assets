@@ -24,17 +24,19 @@ var AssetsCollection = (function (_super) {
         this.comparator = 'name';
         this.url = options.url;
     }
-    AssetsCollection.prototype.fetch = function (options) {
+    AssetsCollection.prototype.fetch = function (options, progress) {
         var _this = this;
         if (options === void 0) { options = {}; }
         return request_1.request.get(this.url)
             .progress(function (e) {
+            progress ? progress() : void 0;
         })
             .json().then(function (result) {
             if (!Array.isArray(result)) {
                 throw new Error('invalid format: expected json array');
             }
-            _this.add(result);
+            _this.reset(result);
+            return _this.models;
         });
     };
     return AssetsCollection;

@@ -7,5 +7,8 @@ export declare const AssetsListItem: any;
 export declare const AssetsEmptyView: any;
 export declare class AssetsListView extends CollectionView<HTMLDivElement> {
     _current: DataView<HTMLDivElement>;
+    private _blazy;
     constructor(options?: AssetsListOptions);
+    onRenderCollection(): void;
+    _initBlazy(): void;
 }

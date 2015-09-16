@@ -13,5 +13,5 @@ export declare class AssetsCollection extends Collection<AssetsModel> {
     comparator: string;
     url: string;
     constructor(models: any, options: AssetsCollectionOptions);
-    fetch(options?: AssetsCollectionFetchOption): Promise<void>;
+    fetch(options?: AssetsCollectionFetchOption, progress?: () => void): Promise<any>;
 }

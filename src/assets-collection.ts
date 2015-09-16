@@ -13,7 +13,7 @@ export interface AssetsCollectionFetchOption {
 export class AssetsModel extends Model {
 	idAttribute = 'path'
 }
-¨
+
 export class AssetsCollection extends Collection<AssetsModel> {
 	Model = AssetsModel
 	comparator = 'name'
@@ -24,18 +24,20 @@ export class AssetsCollection extends Collection<AssetsModel> {
 		this.url = options.url
 	}
 
-	fetch (options:AssetsCollectionFetchOption = {}) {
+	fetch (options:AssetsCollectionFetchOption = {}, progress?:() => void): Promise<any> {
 
 		return request.get(this.url)
 		.progress(function (e) {
-		
+			progress ? progress() : void 0
 		})
 		.json().then((result: Object) => {
 			if (!Array.isArray(result)) {
 				throw new Error('invalid format: expected json array')
 			}
 
-			this.add(result)
+			this.reset(result)
+			
+			return this.models;
 		})
 
 

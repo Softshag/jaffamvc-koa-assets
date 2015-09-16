@@ -14,7 +14,20 @@ var Thumbnailer = (function () {
     Thumbnailer.request = function (asset) {
         return request_1.request.get('/files/' + asset.get('path')).end({
             thumbnail: true,
-            base64: true
+            base64: false
+        }).then(function () {
+            console.log(arguments);
+            return "";
+        });
+    };
+    Thumbnailer.has = function (asset) {
+        return request_1.request.get('/files/' + asset.get('path')).end({
+            thumbnail: true,
+            check: true
+        }).then(function (msg) {
+            return "/files/" + asset.get('path') + "?thumbnail=true";
+        }).catch(function () {
+            return null;
         });
     };
     return Thumbnailer;

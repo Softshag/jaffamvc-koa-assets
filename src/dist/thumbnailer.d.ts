@@ -10,4 +10,5 @@ export declare const MimeList: {
 };
 export declare class Thumbnailer {
     static request(asset: AssetsModel): Promise<string>;
+    static has(asset: AssetsModel): Promise<string>;
 }

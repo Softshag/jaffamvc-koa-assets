@@ -33,5 +33,82 @@
     "mime": "image/png",
     "size": 587616,
     "url": "http://localhost:3000/files/dataloger.png"
+  },
+  {
+    "name": "0218d1b4ef3e2679a288df998ebcafbb63ea41f9.jpg",
+    "path": "0218d1b4ef3e2679a288df998ebcafbb63ea41f9.jpg",
+    "mime": "image/jpeg",
+    "size": 7859166,
+    "url": "http://localhost:3000/files/0218d1b4ef3e2679a288df998ebcafbb63ea41f9.jpg"
+  },
+  {
+    "name": "network.pdf",
+    "path": "network.pdf",
+    "mime": "application/pdf",
+    "size": 743025,
+    "url": "http://localhost:3000/files/network.pdf"
+  },
+  {
+    "name": "distortion.jpg",
+    "path": "distortion.jpg",
+    "mime": "image/jpeg",
+    "size": 50732,
+    "url": "http://localhost:3000/files/distortion.jpg"
+  },
+  {
+    "name": "distortion.jpg",
+    "path": "distortion.jpg",
+    "mime": "image/jpeg",
+    "size": 50732,
+    "url": "http://localhost:3000/files/distortion.jpg"
+  },
+  {
+    "name": "0218d1b4ef3e2679a288df998ebcafbb63ea41f9.jpg",
+    "path": "0218d1b4ef3e2679a288df998ebcafbb63ea41f9.jpg",
+    "mime": "image/jpeg",
+    "size": 7859166,
+    "url": "http://localhost:3000/files/0218d1b4ef3e2679a288df998ebcafbb63ea41f9.jpg"
+  },
+  {
+    "name": "skole.m4v",
+    "path": "skole.m4v",
+    "mime": "video/x-m4v",
+    "size": 3232938,
+    "url": "http://localhost:3000/files/skole.m4v"
+  },
+  {
+    "name": "Clean_Code.pdf",
+    "path": "Clean_Code.pdf",
+    "mime": "application/pdf",
+    "size": 3782924,
+    "url": "http://localhost:3000/files/Clean_Code.pdf"
+  },
+  {
+    "name": "cat2.mp4",
+    "path": "cat2.mp4",
+    "mime": "video/mp4",
+    "size": 255508,
+    "url": "http://localhost:3000/files/cat2.mp4"
+  },
+  {
+    "name": "fulrate.zip",
+    "path": "fulrate.zip",
+    "mime": "application/zip",
+    "size": 1187058,
+    "url": "http://localhost:3000/files/fulrate.zip"
+  },
+  {
+    "name": "index.html",
+    "path": "index.html",
+    "mime": "text/html",
+    "size": 468,
+    "url": "http://localhost:3000/files/index.html"
+  },
+  {
+    "name": "Untitled.aif",
+    "path": "Untitled.aif",
+    "mime": "audio/x-aiff",
+    "size": 13908794,
+    "url": "http://localhost:3000/files/Untitled.aif"
   }
 ]

@@ -17,7 +17,21 @@ export class Thumbnailer {
   static request (asset:AssetsModel): Promise<string> {
     return request.get('/files/' + asset.get('path')).end({
       thumbnail: true,
-      base64: true
-    })
+      base64: false
+    }).then(function () {
+			console.log(arguments)
+			return ""
+		})
   }
+	
+	static has (asset:AssetsModel): Promise<string> {
+		return request.get('/files/' + asset.get('path')).end({
+			thumbnail: true,
+			check:true
+		}).then(function (msg) {
+			return `/files/${asset.get('path')}?thumbnail=true`; 
+		}).catch(function () {
+			return null;
+		})
+	}
 }

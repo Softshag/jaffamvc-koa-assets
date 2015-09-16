@@ -91,9 +91,9 @@ export class AssetsPreview extends LayoutView<HTMLDivElement> {
 			region.el.innerHTML = ''
 			region.el.appendChild(div);
 			
-			Thumbnailer.request(model)
+			Thumbnailer.has(model)
 			.then((test) => {
-				image.src = 'data:image/png;base64,' + test
+				image.src = test
 				div.appendChild(image);
 			}).catch((e) => {
 				console.log(e)

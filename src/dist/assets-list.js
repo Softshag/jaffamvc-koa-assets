@@ -19,8 +19,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var views_1 = require('views');
 var utilities_1 = require('./utilities');
 var templates_1 = require('./templates');
-var thumbnailer_1 = require('./thumbnailer');
 var gallery_1 = require('./gallery');
+var Blazy = require('blazy');
 var MimeList = {
     'audio/mpeg': 'audio-generic',
     'audio/ogg': 'audio-generic',
@@ -44,7 +44,6 @@ exports.AssetsListItem = views_1.DataView.extend({
         'click @ui.remove': 'remove'
     },
     onRender: function () {
-        var _this = this;
         var model = this.model;
         var mime = model.get('mime'); //.replace(/\//, '-')
         mime = MimeList[mime];
@@ -53,14 +52,23 @@ exports.AssetsListItem = views_1.DataView.extend({
             views_1.html.removeClass(this.ui.mime, 'mime-unknown');
         }
         this.ui.name.innerText = utilities_1.truncate(model.get('name'), 25);
-        thumbnailer_1.Thumbnailer.request(model)
-            .then(function (test) {
-            var image = new Image();
-            image.src = 'data:image/png;base64,' + test;
-            _this.ui.mime.parentNode.replaceChild(image, _this.ui.mime);
-        }).catch(function (e) {
-            console.error(model.get('mime'), e);
-        });
+        var img = new Image();
+        img.src = "data:image/png;base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAI=";
+        img.setAttribute('data-src', "/files/" + model.get('path') + "?thumbnail=true");
+        this.ui.mime.parentNode.insertBefore(img, this.ui.mime);
+        this.ui.mime.style.display = 'none';
+        this.trigger('image');
+        /*Thumbnailer.has(model)
+        .then((test) => {
+            let image = new Image();
+            //image.src = "data:base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAI="
+            image.setAttribute('data-src',test)
+            
+            this.ui.mime.parentNode.replaceChild(image, this.ui.mime);
+            this.trigger('image')
+        }).catch((e) => {
+                console.error(model.get('mime'), e)
+        })*/
     }
 });
 exports.AssetsEmptyView = views_1.DataView.extend({
@@ -70,7 +78,7 @@ var AssetsListView = (function (_super) {
     __extends(AssetsListView, _super);
     function AssetsListView(options) {
         _super.call(this, options);
-        this.sort = true;
+        this.sort = false;
         this.listenTo(this, 'childview:click', function (view, model) {
             if (this._current)
                 views_1.html.removeClass(this._current.el, 'active');
@@ -90,12 +98,88 @@ var AssetsListView = (function (_super) {
             else {
             }
         });
+        this.listenTo(this, 'childview:image', function (view) {
+            var img = view.$('img')[0];
+            if (img.src === img.getAttribute('data-src')) {
+                return;
+            }
+            this._blazy.load(view.$('img')[0], (elementInView(view.el, this.el)));
+        });
+        this._initBlazy();
     }
+    AssetsListView.prototype.onRenderCollection = function () {
+        if (this._blazy) {
+            this._blazy.revalidate();
+        }
+        else {
+            this._initBlazy();
+        }
+    };
+    AssetsListView.prototype._initBlazy = function () {
+        this._blazy = new Blazy({
+            container: '.gallery',
+            selector: 'img',
+            error: function (img) {
+                console.log(arguments);
+                var m = img.parentNode.querySelector('.mime-type');
+                if (m) {
+                    m.style.display = 'block';
+                    img.style.display = 'none';
+                }
+            }
+        });
+    };
     AssetsListView = __decorate([
         gallery_1.attributes({ className: 'assets-list collection-mode',
-            childView: exports.AssetsListItem, emptyView: exports.AssetsEmptyView }), 
+            childView: exports.AssetsListItem, emptyView: exports.AssetsEmptyView,
+            events: {
+                'scroll': throttle(function () {
+                    var index = this.index ? this.index : (this.index = 0), len = this.children.length;
+                    for (var i = index; i < len; i++) {
+                        var view = this.children[i], img = view.$('img')[0];
+                        if (img == null)
+                            continue;
+                        if (img.src === img.getAttribute('data-src')) {
+                            index = i;
+                        }
+                        else if (elementInView(img, this.el)) {
+                            index = i;
+                            this._blazy.load(img, true);
+                        }
+                    }
+                    this.index = index;
+                }, 100)
+            } }), 
         __metadata('design:paramtypes', [Object])
     ], AssetsListView);
     return AssetsListView;
 })(views_1.CollectionView);
 exports.AssetsListView = AssetsListView;
+function elementInView(ele, container) {
+    var viewport = {
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+    };
+    viewport.bottom = (container.innerHeight || document.documentElement.clientHeight); // + options.offset;
+    viewport.right = (container.innerWidth || document.documentElement.clientWidth); // + options.offset;
+    var rect = ele.getBoundingClientRect();
+    return (
+    // Intersection
+    rect.right >= viewport.left
+        && rect.bottom >= viewport.top
+        && rect.left <= viewport.right
+        && rect.top <= viewport.bottom) && !ele.classList.contains('b-error');
+}
+function throttle(fn, minDelay) {
+    var lastCall = 0;
+    return function () {
+        var now = +new Date();
+        if (now - lastCall < minDelay) {
+            return;
+        }
+        lastCall = now;
+        fn.apply(this, arguments);
+    };
+}

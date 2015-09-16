@@ -100,17 +100,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.comparator = 'name';
 	        this.url = options.url;
 	    }
-	    AssetsCollection.prototype.fetch = function (options) {
+	    AssetsCollection.prototype.fetch = function (options, progress) {
 	        var _this = this;
 	        if (options === void 0) { options = {}; }
 	        return request_1.request.get(this.url)
 	            .progress(function (e) {
+	            progress ? progress() : void 0;
 	        })
 	            .json().then(function (result) {
 	            if (!Array.isArray(result)) {
 	                throw new Error('invalid format: expected json array');
 	            }
-	            _this.add(result);
+	            _this.reset(result);
+	            return _this.models;
 	        });
 	    };
 	    return AssetsCollection;
@@ -2651,9 +2653,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                views_1.html.addClass(div, 'preview');
 	                region.el.innerHTML = '';
 	                region.el.appendChild(div);
-	                thumbnailer_1.Thumbnailer.request(model)
+	                thumbnailer_1.Thumbnailer.has(model)
 	                    .then(function (test) {
-	                    image.src = 'data:image/png;base64,' + test;
+	                    image.src = test;
 	                    div.appendChild(image);
 	                }).catch(function (e) {
 	                    console.log(e);
@@ -2706,7 +2708,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Thumbnailer.request = function (asset) {
 	        return request_1.request.get('/files/' + asset.get('path')).end({
 	            thumbnail: true,
-	            base64: true
+	            base64: false
+	        }).then(function () {
+	            console.log(arguments);
+	            return "";
+	        });
+	    };
+	    Thumbnailer.has = function (asset) {
+	        return request_1.request.get('/files/' + asset.get('path')).end({
+	            thumbnail: true,
+	            check: true
+	        }).then(function (msg) {
+	            return "/files/" + asset.get('path') + "?thumbnail=true";
+	        }).catch(function () {
+	            return null;
 	        });
 	    };
 	    return Thumbnailer;
@@ -2974,8 +2989,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var views_1 = __webpack_require__(2);
 	var utilities_1 = __webpack_require__(17);
 	var templates_1 = __webpack_require__(20);
-	var thumbnailer_1 = __webpack_require__(21);
 	var gallery_1 = __webpack_require__(25);
+	var Blazy = __webpack_require__(26);
 	var MimeList = {
 	    'audio/mpeg': 'audio-generic',
 	    'audio/ogg': 'audio-generic',
@@ -2999,7 +3014,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'click @ui.remove': 'remove'
 	    },
 	    onRender: function () {
-	        var _this = this;
 	        var model = this.model;
 	        var mime = model.get('mime'); //.replace(/\//, '-')
 	        mime = MimeList[mime];
@@ -3008,14 +3022,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            views_1.html.removeClass(this.ui.mime, 'mime-unknown');
 	        }
 	        this.ui.name.innerText = utilities_1.truncate(model.get('name'), 25);
-	        thumbnailer_1.Thumbnailer.request(model)
-	            .then(function (test) {
-	            var image = new Image();
-	            image.src = 'data:image/png;base64,' + test;
-	            _this.ui.mime.parentNode.replaceChild(image, _this.ui.mime);
-	        }).catch(function (e) {
-	            console.error(model.get('mime'), e);
-	        });
+	        var img = new Image();
+	        img.src = "data:image/png;base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAI=";
+	        img.setAttribute('data-src', "/files/" + model.get('path') + "?thumbnail=true");
+	        this.ui.mime.parentNode.insertBefore(img, this.ui.mime);
+	        this.ui.mime.style.display = 'none';
+	        this.trigger('image');
+	        /*Thumbnailer.has(model)
+	        .then((test) => {
+	            let image = new Image();
+	            //image.src = "data:base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAI="
+	            image.setAttribute('data-src',test)
+	            
+	            this.ui.mime.parentNode.replaceChild(image, this.ui.mime);
+	            this.trigger('image')
+	        }).catch((e) => {
+	                console.error(model.get('mime'), e)
+	        })*/
 	    }
 	});
 	exports.AssetsEmptyView = views_1.DataView.extend({
@@ -3025,7 +3048,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __extends(AssetsListView, _super);
 	    function AssetsListView(options) {
 	        _super.call(this, options);
-	        this.sort = true;
+	        this.sort = false;
 	        this.listenTo(this, 'childview:click', function (view, model) {
 	            if (this._current)
 	                views_1.html.removeClass(this._current.el, 'active');
@@ -3045,15 +3068,91 @@ return /******/ (function(modules) { // webpackBootstrap
 	            else {
 	            }
 	        });
+	        this.listenTo(this, 'childview:image', function (view) {
+	            var img = view.$('img')[0];
+	            if (img.src === img.getAttribute('data-src')) {
+	                return;
+	            }
+	            this._blazy.load(view.$('img')[0], (elementInView(view.el, this.el)));
+	        });
+	        this._initBlazy();
 	    }
+	    AssetsListView.prototype.onRenderCollection = function () {
+	        if (this._blazy) {
+	            this._blazy.revalidate();
+	        }
+	        else {
+	            this._initBlazy();
+	        }
+	    };
+	    AssetsListView.prototype._initBlazy = function () {
+	        this._blazy = new Blazy({
+	            container: '.gallery',
+	            selector: 'img',
+	            error: function (img) {
+	                console.log(arguments);
+	                var m = img.parentNode.querySelector('.mime-type');
+	                if (m) {
+	                    m.style.display = 'block';
+	                    img.style.display = 'none';
+	                }
+	            }
+	        });
+	    };
 	    AssetsListView = __decorate([
 	        gallery_1.attributes({ className: 'assets-list collection-mode',
-	            childView: exports.AssetsListItem, emptyView: exports.AssetsEmptyView }), 
+	            childView: exports.AssetsListItem, emptyView: exports.AssetsEmptyView,
+	            events: {
+	                'scroll': throttle(function () {
+	                    var index = this.index ? this.index : (this.index = 0), len = this.children.length;
+	                    for (var i = index; i < len; i++) {
+	                        var view = this.children[i], img = view.$('img')[0];
+	                        if (img == null)
+	                            continue;
+	                        if (img.src === img.getAttribute('data-src')) {
+	                            index = i;
+	                        }
+	                        else if (elementInView(img, this.el)) {
+	                            index = i;
+	                            this._blazy.load(img, true);
+	                        }
+	                    }
+	                    this.index = index;
+	                }, 100)
+	            } }), 
 	        __metadata('design:paramtypes', [Object])
 	    ], AssetsListView);
 	    return AssetsListView;
 	})(views_1.CollectionView);
 	exports.AssetsListView = AssetsListView;
+	function elementInView(ele, container) {
+	    var viewport = {
+	        top: 0,
+	        left: 0,
+	        bottom: 0,
+	        right: 0
+	    };
+	    viewport.bottom = (container.innerHeight || document.documentElement.clientHeight); // + options.offset;
+	    viewport.right = (container.innerWidth || document.documentElement.clientWidth); // + options.offset;
+	    var rect = ele.getBoundingClientRect();
+	    return (
+	    // Intersection
+	    rect.right >= viewport.left
+	        && rect.bottom >= viewport.top
+	        && rect.left <= viewport.right
+	        && rect.top <= viewport.bottom) && !ele.classList.contains('b-error');
+	}
+	function throttle(fn, minDelay) {
+	    var lastCall = 0;
+	    return function () {
+	        var now = +new Date();
+	        if (now - lastCall < minDelay) {
+	            return;
+	        }
+	        lastCall = now;
+	        fn.apply(this, arguments);
+	    };
+	}
 
 
 /***/ },
@@ -3169,6 +3268,244 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return GalleryView;
 	})(views_1.LayoutView);
 	exports.GalleryView = GalleryView;
+
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  hey, [be]Lazy.js - v1.3.1 - 2015.02.01 
+	  A lazy loading and multi-serving image script
+	  (c) Bjoern Klinggaard - @bklinggaard - http://dinbror.dk/blazy
+	*/
+	;(function(root, blazy) {
+		if (true) {
+	        // AMD. Register bLazy as an anonymous module
+	        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (blazy), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof exports === 'object') {
+			// Node. Does not work with strict CommonJS, but
+	        // only CommonJS-like environments that support module.exports,
+	        // like Node. 
+			module.exports = blazy();
+		} else {
+	        // Browser globals. Register bLazy on window
+	        root.Blazy = blazy();
+		}
+	})(this, function () {
+		'use strict';
+		
+		//vars
+		var source, options, viewport, images, count, isRetina, destroyed;
+		//throttle vars
+		var validateT, saveViewportOffsetT;
+		
+		// constructor
+		function Blazy(settings) {
+			//IE7- fallback for missing querySelectorAll support
+			if (!document.querySelectorAll) {
+				var s=document.createStyleSheet();
+				document.querySelectorAll = function(r, c, i, j, a) {
+					a=document.all, c=[], r = r.replace(/\[for\b/gi, '[htmlFor').split(',');
+					for (i=r.length; i--;) {
+						s.addRule(r[i], 'k:v');
+						for (j=a.length; j--;) a[j].currentStyle.k && c.push(a[j]);
+							s.removeRule(0);
+					}
+					return c;
+				};
+			}
+			//init vars
+			destroyed 				= true;
+			images 					= [];
+			viewport				= {};
+			//options
+			options 				= settings 				|| {};
+			options.error	 		= options.error 		|| false;
+			options.offset			= options.offset 		|| 100;
+			options.success			= options.success 		|| false;
+		  	options.selector 		= options.selector 		|| '.b-lazy';
+			options.separator 		= options.separator 	|| '|';
+			options.container		= options.container 	?  document.querySelectorAll(options.container) : false;
+			options.errorClass 		= options.errorClass 	|| 'b-error';
+			options.breakpoints		= options.breakpoints	|| false;
+			options.successClass 	= options.successClass 	|| 'b-loaded';
+			options.src = source 	= options.src			|| 'data-src';
+			isRetina				= window.devicePixelRatio > 1;
+			viewport.top 			= 0 - options.offset;
+			viewport.left 			= 0 - options.offset;
+			//throttle, ensures that we don't call the functions too often
+			validateT				= throttle(validate, 25); 
+			saveViewportOffsetT			= throttle(saveViewportOffset, 50);
+
+			saveViewportOffset();	
+					
+			//handle multi-served image src
+			each(options.breakpoints, function(object){
+				if(object.width >= window.screen.width) {
+					source = object.src;
+					return false;
+				}
+			});
+			
+			// start lazy load
+			initialize();	
+	  	}
+		
+		/* public functions
+		************************************/
+		Blazy.prototype.revalidate = function() {
+	 		initialize();
+	   	};
+		Blazy.prototype.load = function(element, force){
+			if(!isElementLoaded(element)) loadImage(element, force);
+		};
+		Blazy.prototype.destroy = function(){
+			if(options.container){
+				each(options.container, function(object){
+					unbindEvent(object, 'scroll', validateT);
+				});
+			}
+			unbindEvent(window, 'scroll', validateT);
+			unbindEvent(window, 'resize', validateT);
+			unbindEvent(window, 'resize', saveViewportOffsetT);
+			count = 0;
+			images.length = 0;
+			destroyed = true;
+		};
+		
+		/* private helper functions
+		************************************/
+		function initialize(){
+			// First we create an array of images to lazy load
+			createImageArray(options.selector);
+			// Then we bind resize and scroll events if not already binded
+			if(destroyed) {
+				destroyed = false;
+				if(options.container) {
+		 			each(options.container, function(object){
+		 				bindEvent(object, 'scroll', validateT);
+		 			});
+		 		}
+				bindEvent(window, 'resize', saveViewportOffsetT);
+				bindEvent(window, 'resize', validateT);
+		 		bindEvent(window, 'scroll', validateT);
+			}
+			// And finally, we start to lazy load. Should bLazy ensure domready?
+			validate();	
+		}
+		
+		function validate() {
+			for(var i = 0; i<count; i++){
+				var image = images[i];
+	 			if(elementInView(image) || isElementLoaded(image)) {
+					Blazy.prototype.load(image);
+	 				images.splice(i, 1);
+	 				count--;
+	 				i--;
+	 			} 
+	 		}
+			if(count === 0) {
+				Blazy.prototype.destroy();
+			}
+		}
+		
+		function loadImage(ele, force){
+			// if element is visible
+			if(force || (ele.offsetWidth > 0 && ele.offsetHeight > 0)) {
+				var dataSrc = ele.getAttribute(source) || ele.getAttribute(options.src); // fallback to default data-src
+				if(dataSrc) {
+					var dataSrcSplitted = dataSrc.split(options.separator);
+					var src = dataSrcSplitted[isRetina && dataSrcSplitted.length > 1 ? 1 : 0];
+					var img = new Image();
+					// cleanup markup, remove data source attributes
+					each(options.breakpoints, function(object){
+						ele.removeAttribute(object.src);
+					});
+					ele.removeAttribute(options.src);
+					img.onerror = function() {
+						if(options.error) options.error(ele, "invalid");
+						ele.className = ele.className + ' ' + options.errorClass;
+					}; 
+					img.onload = function() {
+						// Is element an image or should we add the src as a background image?
+				      		ele.nodeName.toLowerCase() === 'img' ? ele.src = src : ele.style.backgroundImage = 'url("' + src + '")';	
+						ele.className = ele.className + ' ' + options.successClass;	
+						if(options.success) options.success(ele);
+					};
+					img.src = src; //preload image
+				} else {
+					if(options.error) options.error(ele, "missing");
+					ele.className = ele.className + ' ' + options.errorClass;
+				}
+			}
+		 }
+				
+		function elementInView(ele) {
+			var rect = ele.getBoundingClientRect();
+			
+			return (
+				// Intersection
+				rect.right >= viewport.left
+				&& rect.bottom >= viewport.top
+				&& rect.left <= viewport.right
+				&& rect.top <= viewport.bottom
+			 );
+		 }
+		 
+		 function isElementLoaded(ele) {
+			 return (' ' + ele.className + ' ').indexOf(' ' + options.successClass + ' ') !== -1;
+		 }
+		 
+		 function createImageArray(selector) {
+	 		var nodelist 	= document.querySelectorAll(selector);
+	 		count 			= nodelist.length;
+	 		//converting nodelist to array
+	 		for(var i = count; i--; images.unshift(nodelist[i])){}
+		 }
+		 
+		 function saveViewportOffset(){
+			 viewport.bottom = (window.innerHeight || document.documentElement.clientHeight) + options.offset;
+			 viewport.right = (window.innerWidth || document.documentElement.clientWidth) + options.offset;
+		 }
+		 
+		 function bindEvent(ele, type, fn) {
+			 if (ele.attachEvent) {
+	         		ele.attachEvent && ele.attachEvent('on' + type, fn);
+	       	 	} else {
+	         	       ele.addEventListener(type, fn, false);
+	       		}
+		 }
+		 
+		 function unbindEvent(ele, type, fn) {
+			 if (ele.detachEvent) {
+	         		ele.detachEvent && ele.detachEvent('on' + type, fn);
+	       	 	} else {
+	         	       ele.removeEventListener(type, fn, false);
+	       		}
+		 }
+		 
+		 function each(object, fn){
+	 		if(object && fn) {
+	 			var l = object.length;
+	 			for(var i = 0; i<l && fn(object[i], i) !== false; i++){}
+	 		}
+		 }
+		 
+		 function throttle(fn, minDelay) {
+	     		 var lastCall = 0;
+			 return function() {
+				 var now = +new Date();
+	         		 if (now - lastCall < minDelay) {
+	           			 return;
+				 }
+	         		 lastCall = now;
+	         		 fn.apply(images, arguments);
+	       		 };
+		 }
+	  	
+		 return Blazy;
+	});
 
 
 /***/ }
