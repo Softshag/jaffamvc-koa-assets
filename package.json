@@ -55,7 +55,7 @@
     "native-or-bluebird": "^1.2.0",
     "object-assign": "^2.0.0",
     "pipe": "git+https://github.com/kildevaeld/node-pipe.git",
-    "views": "git+https://github.com/kildevaeld/views.git"
+    "views": "git+https://github.com/kildevaeld/views.git#v0.1.9"
   },
   "peerDependencies": {
     "jaffamvc-koa": "~0.3.8"

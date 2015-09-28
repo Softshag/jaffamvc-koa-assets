@@ -3,7 +3,7 @@ import {BaseObject, ViewOptions, LayoutView, utils, CollectionView} from 'views'
 import * as templates from './templates'
 import {AssetsListView} from './assets-list'
 import {AssetsPreview} from './assets-preview'
-import {AssetsCollection} from './assets-collection'
+import {AssetsCollection, AssetsModel} from './assets-collection'
 import {UploadButton} from './filebutton'
 
 export function template (name:string): ClassDecorator {
@@ -33,6 +33,7 @@ export interface GalleryViewOptions extends ViewOptions {
 @attributes({className:'assets-gallery gallery', tagName:'div',ui:{button:'.upload-button'}})
 export class GalleryView extends LayoutView<HTMLDivElement> {
 	collection: AssetsCollection
+	selected: AssetsModel
 	private _listView: AssetsListView
 	private _preView: AssetsPreview
 	private _uploadButton: UploadButton
@@ -81,6 +82,7 @@ export class GalleryView extends LayoutView<HTMLDivElement> {
 		this.listenTo(this._listView, 'remove', this._onItemRemove)
 		this.listenTo(this._uploadButton, 'upload', this._onItemCreate);
 		//collection.fetch()
+		this.collection = collection
 	}
 
 	onRender () {
@@ -99,6 +101,7 @@ export class GalleryView extends LayoutView<HTMLDivElement> {
 		if (this._preView.model == model) return
 
 		this._preView.model = model
+		this.selected = model
 	}
 
 	private _onItemRemove ({model}) {

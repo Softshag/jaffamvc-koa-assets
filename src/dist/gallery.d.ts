@@ -1,7 +1,7 @@
 import { ViewOptions, LayoutView } from 'views';
 import { AssetsListView } from './assets-list';
 import { AssetsPreview } from './assets-preview';
-import { AssetsCollection } from './assets-collection';
+import { AssetsCollection, AssetsModel } from './assets-collection';
 export declare function template(name: string): ClassDecorator;
 export declare function attributes(attrs: Object): ClassDecorator;
 export interface GalleryViewOptions extends ViewOptions {
@@ -12,6 +12,7 @@ export interface GalleryViewOptions extends ViewOptions {
 }
 export declare class GalleryView extends LayoutView<HTMLDivElement> {
     collection: AssetsCollection;
+    selected: AssetsModel;
     private _listView;
     private _preView;
     private _uploadButton;

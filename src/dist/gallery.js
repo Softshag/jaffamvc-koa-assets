@@ -67,6 +67,7 @@ var GalleryView = (function (_super) {
         this.listenTo(this._listView, 'remove', this._onItemRemove);
         this.listenTo(this._uploadButton, 'upload', this._onItemCreate);
         //collection.fetch()
+        this.collection = collection;
     }
     Object.defineProperty(GalleryView.prototype, "listView", {
         get: function () {
@@ -95,6 +96,7 @@ var GalleryView = (function (_super) {
         if (this._preView.model == model)
             return;
         this._preView.model = model;
+        this.selected = model;
     };
     GalleryView.prototype._onItemRemove = function (_a) {
         var model = _a.model;
