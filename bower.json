@@ -1,0 +1,26 @@
+{
+  "name": "jaffamvc-koa-assets",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Softshag/jaffamvc-koa-assets",
+  "private": true,
+  "main": [
+    "dist/client.js",
+    "dist/client.css"
+  ],
+  "authors": [
+    "Softshag & Me <admin@softshag.dk>"
+  ],
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -63,7 +63,7 @@ exports.AssetsListItem = views_1.DataView.extend({
             let image = new Image();
             //image.src = "data:base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAI="
             image.setAttribute('data-src',test)
-            
+
             this.ui.mime.parentNode.replaceChild(image, this.ui.mime);
             this.trigger('image')
         }).catch((e) => {
@@ -103,7 +103,7 @@ var AssetsListView = (function (_super) {
             if (img.src === img.getAttribute('data-src')) {
                 return;
             }
-            this._blazy.load(view.$('img')[0], (elementInView(view.el, this.el)));
+            this._blazy.load(view.$('img')[0], elementInView(view.el, this.el));
         });
         this._initBlazy();
     }

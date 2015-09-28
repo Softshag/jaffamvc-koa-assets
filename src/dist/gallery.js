@@ -66,7 +66,7 @@ var GalleryView = (function (_super) {
         this.listenTo(this._listView, 'selected', this._onItemSelect);
         this.listenTo(this._listView, 'remove', this._onItemRemove);
         this.listenTo(this._uploadButton, 'upload', this._onItemCreate);
-        collection.fetch();
+        //collection.fetch()
     }
     Object.defineProperty(GalleryView.prototype, "listView", {
         get: function () {

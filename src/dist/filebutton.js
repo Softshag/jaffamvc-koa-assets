@@ -66,6 +66,7 @@ var UploadButton = (function (_super) {
         if (files.length === 0)
             return;
         var file = files[0];
+        this.trigger('change', file);
         if (this.options.autoUpload === true) {
             this.upload(file);
         }
@@ -77,6 +78,7 @@ var UploadButton = (function (_super) {
             pv.show();
         }
         this.uploader.upload(file, function (progress, total) {
+            _this.trigger('progress', { progress: progress, total: total });
             _this.showProgress(progress, total);
         }).then(function (result) {
             _this.trigger('upload', result);

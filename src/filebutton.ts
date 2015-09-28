@@ -68,7 +68,7 @@ export function createButton (options:UploadButtonOptions) : any {
 
 
 export class UploadButton extends View<HTMLInputElement> {
-  
+
 
   options: UploadButtonOptions
   progressView: IProgressView
@@ -81,21 +81,22 @@ export class UploadButton extends View<HTMLInputElement> {
     options.tagName = 'input'
     options.attributes = {type:'file'}
     options.className = 'file-input-button'
-    
+
 
     this.options = utils.extend({}, defaults,options)
 
     utils.extend(this, utils.pick(this.options, ['errorView','progressView']))
 
     this.uploader = this.options.uploader|| new FileUploader(options)
-    
+
     this.events = {
       'change': '_onChange'
     }
-    
+
     super(options)
 
   }
+
 
   private _onChange (e: Event) {
 
@@ -105,6 +106,8 @@ export class UploadButton extends View<HTMLInputElement> {
     if (files.length === 0) return
 
     let file = files[0]
+
+    this.trigger('change', file);
 
     if (this.options.autoUpload === true) {
       this.upload(file)
@@ -119,6 +122,7 @@ export class UploadButton extends View<HTMLInputElement> {
     }
 
     this.uploader.upload(file, (progress, total) => {
+      this.trigger('progress', { progress, total })
       this.showProgress(progress, total)
     }).then((result) => {
       this.trigger('upload', result)

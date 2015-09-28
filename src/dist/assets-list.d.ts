@@ -3,8 +3,8 @@ import { CollectionView, CollectionViewOptions, DataView } from 'views';
 export interface AssetsListOptions extends CollectionViewOptions {
     deleteable?: boolean;
 }
-export declare const AssetsListItem: any;
-export declare const AssetsEmptyView: any;
+export declare const AssetsListItem: {};
+export declare const AssetsEmptyView: {};
 export declare class AssetsListView extends CollectionView<HTMLDivElement> {
     _current: DataView<HTMLDivElement>;
     private _blazy;

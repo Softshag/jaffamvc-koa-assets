@@ -53,7 +53,7 @@ export const AssetsListItem = DataView.extend({
 		let img = new Image();
 		img.src = "data:image/png;base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAI="
 		img.setAttribute('data-src', `/files/${model.get('path')}?thumbnail=true`)
-		
+
 		this.ui.mime.parentNode.insertBefore(img, this.ui.mime);
 		this.ui.mime.style.display = 'none'
 		this.trigger('image')
@@ -62,7 +62,7 @@ export const AssetsListItem = DataView.extend({
 			let image = new Image();
 			//image.src = "data:base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAI="
 			image.setAttribute('data-src',test)
-			
+
 			this.ui.mime.parentNode.replaceChild(image, this.ui.mime);
 			this.trigger('image')
 		}).catch((e) => {
@@ -76,13 +76,13 @@ export const AssetsEmptyView = DataView.extend({
 })
 
 
-@attributes({className:'assets-list collection-mode', 
+@attributes({className:'assets-list collection-mode',
 	childView: AssetsListItem, emptyView: AssetsEmptyView,
 	events: {
 		'scroll': throttle(function () {
 			let index = this.index ? this.index : (this.index = 0),
 				len = this.children.length
-			
+
 			for (let i = index;i<len;i++) {
 				let view = this.children[i],
 					img = view.$('img')[0]
@@ -104,11 +104,11 @@ export class AssetsListView extends CollectionView<HTMLDivElement> {
 	constructor (options?:AssetsListOptions) {
 		super(options);
 		this.sort = false
-		
+
 		this.listenTo(this, 'childview:click', function (view, model) {
 			if (this._current) html.removeClass(this._current.el, 'active')
 			this._current = view
-			html.addClass(view.el, 'active')		
+			html.addClass(view.el, 'active')
 			this.trigger('selected', view, model);
 		});
 
@@ -124,28 +124,28 @@ export class AssetsListView extends CollectionView<HTMLDivElement> {
 
 			}
 		});
-		
+
 		this.listenTo(this, 'childview:image', function (view) {
 			let img = view.$('img')[0]
 			if (img.src === img.getAttribute('data-src')) {
 				return;
 			}
-			this._blazy.load(view.$('img')[0], (elementInView(view.el, this.el))
+      this._blazy.load(view.$('img')[0], elementInView(view.el, this.el));
 		});
-		
+
 		this._initBlazy()
-		
+
 	}
-	
+
 	onRenderCollection () {
 		if (this._blazy) {
 			this._blazy.revalidate();
 		} else {
 			this._initBlazy();
 		}
-		
+
 	}
-	
+
 	_initBlazy () {
 		this._blazy = new Blazy({
 			container: '.gallery',
@@ -160,11 +160,11 @@ export class AssetsListView extends CollectionView<HTMLDivElement> {
 			}
 		});
 	}
-	
+
 }
 
 function elementInView(ele, container) {
-	
+
 		var viewport = {
 			top: 0,
 			left: 0,
@@ -174,7 +174,7 @@ function elementInView(ele, container) {
 		viewport.bottom = (container.innerHeight || document.documentElement.clientHeight)// + options.offset;
 		viewport.right = (container.innerWidth || document.documentElement.clientWidth)// + options.offset;
 		var rect = ele.getBoundingClientRect();
-		
+
 		return (
 			// Intersection
 			rect.right >= viewport.left
