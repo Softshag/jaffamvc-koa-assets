@@ -35,7 +35,7 @@ var FileUploader = (function (_super) {
     FileUploader.prototype.upload = function (file, progressFn, attributes) {
         var _this = this;
         try {
-            this._validateFile(file);
+            this.validateFile(file);
         }
         catch (e) {
             return Promise.reject(e);
@@ -61,7 +61,7 @@ var FileUploader = (function (_super) {
         })
             .json(formData);
     };
-    FileUploader.prototype._validateFile = function (file) {
+    FileUploader.prototype.validateFile = function (file) {
         var maxSize = this.options.maxSize * 1000;
         if (maxSize !== 0 && file.size > maxSize) {
             throw new Error('file to big');

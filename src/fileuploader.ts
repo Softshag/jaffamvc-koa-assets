@@ -48,7 +48,7 @@ export default class FileUploader extends EventEmitter {
     upload(file: File, progressFn?:FileUploadProgress, attributes?:Object): Promise<Object> {
 
         try {
-          this._validateFile(file);
+          this.validateFile(file);
         } catch (e) {
           return Promise.reject(e)
           //return Promise.reject<FileUploadResult>(e)
@@ -64,17 +64,17 @@ export default class FileUploader extends EventEmitter {
           var value = attributes[key];
           formData.append(key, value);
         });
-        
+
         let method: string = HttpMethod[this.options.method]
-        
+
         let request = new Request(method,this.options.url)
-        
+
         return request
         .progress( (event:ProgressEvent) => {
           if (event.lengthComputable) {
              let progress = (event.loaded / event.total * 100 || 0);
              this.trigger('progress', file, progress);
-             
+
              if (progressFn != null) {
                progressFn(event.loaded, event.total)
              }
@@ -82,13 +82,13 @@ export default class FileUploader extends EventEmitter {
         })
         .json(formData)
 
-       
+
     }
 
-    private _validateFile (file: File) {
-      
+    validateFile (file: File) {
+
       let maxSize = this.options.maxSize * 1000
-      
+
       if (maxSize !== 0 && file.size > maxSize) {
         throw new Error('file to big');
       }

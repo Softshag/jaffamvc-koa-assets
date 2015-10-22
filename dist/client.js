@@ -3171,7 +3171,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    FileUploader.prototype.upload = function (file, progressFn, attributes) {
 	        var _this = this;
 	        try {
-	            this._validateFile(file);
+	            this.validateFile(file);
 	        }
 	        catch (e) {
 	            return Promise.reject(e);
@@ -3197,7 +3197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        })
 	            .json(formData);
 	    };
-	    FileUploader.prototype._validateFile = function (file) {
+	    FileUploader.prototype.validateFile = function (file) {
 	        var maxSize = this.options.maxSize * 1000;
 	        if (maxSize !== 0 && file.size > maxSize) {
 	            throw new Error('file to big');
@@ -3311,6 +3311,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.options.autoUpload === true) {
 	            this.upload(file);
 	        }
+	        else {
+	            try {
+	                this.uploader.validateFile(file);
+	            }
+	            catch (e) {
+	                this.trigger('error', e);
+	            }
+	        }
 	    };
 	    UploadButton.prototype.upload = function (file) {
 	        var _this = this;
@@ -3327,6 +3335,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                pv.hide();
 	            _this.clear();
 	        }).catch(function (e) {
+	            _this.trigger('error', e);
 	            _this.showErrorMessage(e);
 	            _this.clear();
 	            if (pv != null)

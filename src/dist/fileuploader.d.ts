@@ -27,5 +27,5 @@ export default class FileUploader extends EventEmitter {
     options: FileUploaderOptions;
     constructor(options: FileUploaderOptions);
     upload(file: File, progressFn?: FileUploadProgress, attributes?: Object): Promise<Object>;
-    private _validateFile(file);
+    validateFile(file: File): void;
 }

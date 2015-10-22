@@ -111,8 +111,15 @@ export class UploadButton extends View<HTMLInputElement> {
 
     if (this.options.autoUpload === true) {
       this.upload(file)
-    }
+    } else {
 
+      try {
+        this.uploader.validateFile(file);
+      } catch (e) {
+        this.trigger('error', e);
+      }
+
+    }
   }
 
   private upload (file: File) {
@@ -129,6 +136,7 @@ export class UploadButton extends View<HTMLInputElement> {
       if (pv != null) pv.hide()
       this.clear()
     }).catch((e) => {
+      this.trigger('error', e);
       this.showErrorMessage(e)
       this.clear()
       if (pv != null) pv.hide()

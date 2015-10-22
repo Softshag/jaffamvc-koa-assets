@@ -70,6 +70,14 @@ var UploadButton = (function (_super) {
         if (this.options.autoUpload === true) {
             this.upload(file);
         }
+        else {
+            try {
+                this.uploader.validateFile(file);
+            }
+            catch (e) {
+                this.trigger('error', e);
+            }
+        }
     };
     UploadButton.prototype.upload = function (file) {
         var _this = this;
@@ -86,6 +94,7 @@ var UploadButton = (function (_super) {
                 pv.hide();
             _this.clear();
         }).catch(function (e) {
+            _this.trigger('error', e);
             _this.showErrorMessage(e);
             _this.clear();
             if (pv != null)
